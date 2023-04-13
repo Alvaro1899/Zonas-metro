@@ -1,0 +1,188 @@
+---
+title: "Mi Documento R Markdown"
+author: "Alvaro Martínez, Leonardo Perez"
+date: "4 de abril de 2023"
+params:
+  zona: "1.01"
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(readxl)
+Base_unica<- read.csv("./Bases de datos/Base_unica.csv")
+```
+
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+#Tabla con los nombres y claves de ZM
+library(dplyr)
+
+tabla_unica <- Base_unica %>% 
+  select(NOM_ZM, CVE_ZM) %>% 
+  unique()
+View(tabla_unica)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Obtener el nombre de todas las variables en la base de datos
+variables <- names(Base_unica)
+
+# Filtrar las variables que deseas utilizar
+variables_utilizar <- variables[variables != "ID_VIV"]
+
+# Utilizar las variables filtradas en tus cálculos o análisis
+Base_zona <- Base_unica[Base_unica$CVE_ZM == params$zona, variables_utilizar]
+
+```
+
+# Ficha básica de la Zona Metropolitana de ``r unique(Base_zona$NOM_ZM) ``
+
+A continuación se presentan los datos sociodemograficos principales de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` con la clave``r params$zona ``. 
+
+- La zona se compone de un total de ``r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE]) `` municipios, los cuales son: 
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap= "Municipios de la zona metropolitana", fig.width=4, fig.height=4}
+
+library(knitr)
+library(kableExtra)
+library(DT)
+library(data.table)
+
+Base_zona_subset <- subset(Base_zona, select = c(nom_mun, cvegeo))
+# Cambiar nombres de columnas
+setnames(Base_zona_subset, c("Nombre", "Clave"))
+
+datatable(Base_zona_subset, 
+          caption = "Municipios",
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE,
+          width = "40%")
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.width=4, fig.height=4, fig.cap= "Mapa de la zona metropolitana"}
+
+#Mapa de la zona metropolitana
+
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(sf)
+library(ggplot2)
+library(tmap)
+library(tmaptools)
+library(RColorBrewer)
+library(cartogram)
+# Carga los datos del archivo shapefile
+municipios <- st_read("Bases de datos/cartografía/00mun.shp", quiet = TRUE)
+
+# Filtra los municipios de la zona metropolitana seleccionada
+municipios_zm <- municipios %>% filter(CVE_ZM == params$zona)
+
+# Activa el modo dinámico de tmap
+tmap_mode("view")
+
+#mapa 2
+tmap::tm_shape(municipios_zm) +
+  tmap::tm_borders() +
+  tmap::tm_fill("nom_ent", alpha = 0.9, legend.show = FALSE) +
+  tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
+
+```
+
+### Composición, estructura y distribución de la población
+
+- La zona metropo una pobalción de ``r format(sum(Base_zona$POBTOT), big.mark=",") `` de habitantes, según el Censo de Población y Vivienda 2020. La distribución de la pobalción se situa en 
+
+```{r message=FALSE, warning=FALSE, fig.width=4, fig.height=4}
+# Agregar un cero a la izquierda de la variable cvegeo
+Base_zona$cvegeo <- sprintf("%05d", Base_zona$cvegeo)
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.width=4, fig.height=4, fig.cap= "Distribución poblacional"}
+# Seleccionar las variables de interés y unirlas con la cartografía por la clave cvegeo
+municipios_unidos <- municipios_zm %>%
+  inner_join(Base_zona %>% select(cvegeo, POBTOT, POBFEM, POBMAS), by = "cvegeo")
+
+tmap_mode("view")
+# Definir el número de clases en el mapa temático
+if (nrow(municipios_unidos) < 5) {
+  num_classes <- nrow(municipios_unidos)
+} else {
+  num_classes <- 5
+}
+
+# Crear el mapa temático
+tmap::tm_shape(municipios_unidos) +
+  tmap::tm_borders() +
+  tmap::tm_fill("POBTOT", alpha = 0.9, title = "Población", style ="equal", n = num_classes) +
+  tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
+```
+
+
+Según datos del CPV (2020), el municipio de Tecámac cuenta con una población de 547,503 habitantes, de los cuales 265,520 son hombres y 281,983 son mujeres, lo que representa el 48.5% y el 51.5% respectivamente (Tabla 1).
+
+- La estructura de población de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` presenta de la siguiente forma:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=4}
+#Piramide poblacional
+
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+require(RColorBrewer)
+
+# Sumar todos los registros para cada variable
+total_poblacion <- c(
+  sum(Base_zona$P_0A4_M), sum(Base_zona$P_5A9_M), sum(Base_zona$P_10A14_M),
+  sum(Base_zona$P_15A19_M), sum(Base_zona$P_20A24_M), sum(Base_zona$P_25A29_M),
+  sum(Base_zona$P_30A34_M), sum(Base_zona$P_35A39_M), sum(Base_zona$P_40A44_M),
+  sum(Base_zona$P_45A49_M), sum(Base_zona$P_50A54_M), sum(Base_zona$P_55A59_M),
+  sum(Base_zona$P_60A64_M), sum(Base_zona$P_65A69_M), sum(Base_zona$P_70A74_M),
+  sum(Base_zona$P_75A79_M), sum(Base_zona$P_80A84_M), sum(Base_zona$P_85YMAS_M),
+  sum(Base_zona$P_0A4_F), sum(Base_zona$P_5A9_F), sum(Base_zona$P_10A14_F),
+  sum(Base_zona$P_15A19_F), sum(Base_zona$P_20A24_F), sum(Base_zona$P_25A29_F),
+  sum(Base_zona$P_30A34_F), sum(Base_zona$P_35A39_F), sum(Base_zona$P_40A44_F),
+  sum(Base_zona$P_45A49_F), sum(Base_zona$P_50A54_F), sum(Base_zona$P_55A59_F),
+  sum(Base_zona$P_60A64_F), sum(Base_zona$P_65A69_F), sum(Base_zona$P_70A74_F),
+  sum(Base_zona$P_75A79_F), sum(Base_zona$P_80A84_F), sum(Base_zona$P_85YMAS_F)
+)
+# Crear una tabla con la información separada por edad, sexo y población
+# Crear una tabla con la información separada por edad, sexo y población
+edades <- c(
+  "0 a 4", "5 a 9", "10 a 14",
+  "15 a 19", "20 a 24", "25 a 29",
+  "30 a 34", "35 a 39", "40 a 44",
+  "45 a 49", "50 a 54", "55 a 59",
+  "60 a 64", "65 a 69", "70 a 74",
+  "75 a 79", "80 a 84", "85 y más")
+
+# Crear un vector con la información de género
+generos <- rep(c("M", "F"), each = 18)
+
+# Crear un vector con la información de población
+poblacion <- c(total_poblacion[1:18], total_poblacion[19:36])
+
+# Crear un data frame con la información
+tabla_poblacion <- data.frame(edad = edades, genero = generos, poblacion = poblacion)
+
+tabla_poblacion$poblacion<- ifelse(tabla_poblacion$genero == "M", -1*tabla_poblacion$poblacion, tabla_poblacion$poblacion)
+
+tabla_poblacion$edad <- factor(tabla_poblacion$edad, levels = unique(tabla_poblacion$edad))
+
+## Los gráficos piramidales son dos gráficos de barras con ejes invertidos
+piramide <- ggplot(tabla_poblacion, aes(x = edad, y = poblacion)) +
+  geom_bar(data = subset(tabla_poblacion, genero == "F"), aes(fill = "F"), stat = "identity") +
+  geom_bar(data = subset(tabla_poblacion, genero == "M"), aes(fill = "M"), stat = "identity") +
+  scale_fill_manual(values=c("F"="pink","M"="blue")) +
+  scale_y_continuous(labels = paste0(as.character(c(seq(2, 0, -1), seq(1, 2, 1))), "m"))  +
+  coord_flip()+
+  labs(fill = "Sexo", x = "Edad", y = "Población")
+
+piramide
+
+```
+
+### Datos economicos.
+
+
+
