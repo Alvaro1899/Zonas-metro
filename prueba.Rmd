@@ -97,8 +97,10 @@ tmap::tm_shape(municipios_zm) +
 
 - La zona metropo una pobalción de ``r format(sum(Base_zona$POBTOT), big.mark=",") `` de habitantes, según el Censo de Población y Vivienda 2020. La distribución de la pobalción se situa en 
 
-```{r message=FALSE, warning=FALSE, fig.width=4, fig.height=4}
+```{r eval=FALSE, fig.height=4, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
+
 # Agregar un cero a la izquierda de la variable cvegeo
+
 Base_zona$cvegeo <- sprintf("%05d", Base_zona$cvegeo)
 ```
 
