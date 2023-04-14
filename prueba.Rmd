@@ -3,40 +3,33 @@ title: "Ficha de Información Metropolitana"
 author: "Martínez Rodriguez, Alvaro; Pérez Victorino, Leonardo"
 institution: "Universidad Autonóma Metropolitana Unidad Azcapotzalco"
 date: "4 de abril de 2023"
+output: 
+  html_document:
+    runtime: shiny
 params:
-<<<<<<< HEAD
   zona: "1.01"
---
-=======
-  zona:
-    value:
-    label: "zona"
-    input: "select"
-    choices: [ "1.01", "2.01", "2.02", "2.03", "3.01", "4.01", "5.04", "5.02", "5.01", "5.03", "6.02", "6.01", "7.02", "7.01", "8.01", "8.02", "8.03", "8.04", "9.01", "10.01", "22.01", "11.01", "11.02", "11.03", "11.04", "16.01", "11.05", "12.01", "12.02", "13.02", "13.03", "13.01", "14.01", "14.02", "14.03", "15.02", "15.01", "16.02", "16.03", "17.01", "17.02", "18.01", "19.01", "20.01", "20.02", "21.01", "21.03", "21.02", "23.01", "23.02", "24.01", "24.02", "25.01", "25.02", "26.01", "26.02", "26.03", "27.01", "28.05", "28.02", "28.03", "28.04", "28.01", "29.01", "30.01", "30.07", "30.03", "30.05", "30.08", "30.06", "30.02", "30.04", "31.01", "32.01"]
 ---
->>>>>>> c28b956276cfcddf13e8f2859a2ec5125fea83ed
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 
 library(readxl)
-Base_unica <- read_excel("..\\Bases de datos\\Base única.xlsx")
+Base_unica <- read_excel("Bases de datos\\Base única.xlsx")
 
 ```
-
-```{r}
-
-```
-
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 #Tabla con los nombres y claves de ZM
 library(dplyr)
+library(openxlsx)
 
 tabla_unica <- Base_unica %>% 
   select(NOM_ZM, CVE_ZM) %>% 
   unique()
 View(tabla_unica)
+write.xlsx(tabla_unica, "Bases de datos/tabla_unica.xlsx", rowNames = FALSE)
+
 ```
+
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Obtener el nombre de todas las variables en la base de datos
@@ -66,7 +59,7 @@ library(knitr)
 library(kableExtra)
 library(DT)
 library(data.table)
-
+library(scales)
 Base_zona_subset <- subset(Base_zona, select = c(nom_mun, cvegeo))
 
 # Cambiar nombres de columnas
@@ -80,7 +73,6 @@ datatable(Base_zona_subset,
 ```
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.width=4, fig.height=4, fig.cap= "Mapa de la zona metropolitana"}
-
 #Mapa de la zona metropolitana
 
 knitr::opts_chunk$set(echo = FALSE)
@@ -105,12 +97,28 @@ tmap::tm_shape(municipios_zm) +
   tmap::tm_borders() +
   tmap::tm_fill("nom_ent", alpha = 0.9, legend.show = FALSE) +
   tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
-
 ```
 
-### Composición, estructura y distribución de la población
 
-- La zona metropo una pobalción de ``r format(sum(Base_zona$POBTOT), big.mark=",") `` de habitantes, según el Censo de Población y Vivienda 2020. La distribución de la pobalción se situa en 
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Calcula el área en unidades del objeto sf
+area <- st_area(municipios_zm)
+
+# Convierte el área a kilómetros cuadrados
+area_km2 <- area / 1000000
+```
+###Información sociodemografica
+
+##### Composición, estructura y distribución de la población
+
+La zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` tiene una pobalción de ``r format(sum(Base_zona$POBTOT), big.mark=",") `` de habitantes, según el Censo de Población y Vivienda 2020. La composición de la población se describe en los siguientes puntos:
+
+- Población total respecto al país: ``r round(sum(Base_zona$POBTOT) / sum(Base_unica$POBTOT), digits = 3) %>% percent()``
+- Población Masculina:  ``r round(sum(Base_zona$POBMAS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+- Población Femenina: ``r round(sum(Base_zona$POBFEM) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+- Relación M-F: ``r sum(Base_zona$REL_H_M)/nrow(Base_zona) ``
+- Grado promedio de escolaridad: ``r sum(Base_zona$GRAPROES)/nrow(Base_zona)``
+- Densisad poblacional ``r sum(Base_zona$POBTOT)/sum(round(area_km2, 2))``
 
 ```{r eval=FALSE, fig.height=4, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -140,10 +148,7 @@ tmap::tm_shape(municipios_unidos) +
   tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
 ```
 
-
-Según datos del CPV (2020), el municipio de Tecámac cuenta con una población de 547,503 habitantes, de los cuales 265,520 son hombres y 281,983 son mujeres, lo que representa el 48.5% y el 51.5% respectivamente (Tabla 1).
-
-- La estructura de población de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` presenta de la siguiente forma:
+- La estructura de población de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` presenta en la siguiente piramide poblacional:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=4}
 #Piramide poblacional
@@ -204,9 +209,15 @@ piramide
 
 ```
 
+##### Indices de envejecimiento, juventud y tasa de dependencia
+
+##### Migración
+
+##### Indice de Desarrollo Humano (IDH), Índice de Marginación (IM) e Índice de Rezago Social (IRS).
+
 ### Datos económicos.
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 library(shiny)
 library(DT)
 library(data.table)
