@@ -5,9 +5,9 @@ institution: "Universidad Autonóma Metropolitana Unidad Azcapotzalco"
 date: "4 de abril de 2023"
 output: 
   html_document:
-    runtime: shiny
-params:
-  zona: "1.01"
+    theme: cerulean
+  params:
+    zona: "1.01"
 ---
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -26,7 +26,6 @@ tabla_unica <- Base_unica %>%
   select(NOM_ZM, CVE_ZM) %>% 
   unique()
 View(tabla_unica)
-write.xlsx(tabla_unica, "Bases de datos/tabla_unica.xlsx", rowNames = FALSE)
 
 ```
 
@@ -217,7 +216,7 @@ piramide
 
 ### Datos económicos.
 
-```{r eval=FALSE, include=FALSE}
+```{r echo=FALSE}
 library(shiny)
 library(DT)
 library(data.table)
