@@ -4,8 +4,17 @@ author: "Martínez Rodriguez, Alvaro; Pérez Victorino, Leonardo"
 institution: "Universidad Autonóma Metropolitana Unidad Azcapotzalco"
 date: "4 de abril de 2023"
 params:
+<<<<<<< HEAD
   zona: "1.01"
 --
+=======
+  zona:
+    value:
+    label: "zona"
+    input: "select"
+    choices: [ "1.01", "2.01", "2.02", "2.03", "3.01", "4.01", "5.04", "5.02", "5.01", "5.03", "6.02", "6.01", "7.02", "7.01", "8.01", "8.02", "8.03", "8.04", "9.01", "10.01", "22.01", "11.01", "11.02", "11.03", "11.04", "16.01", "11.05", "12.01", "12.02", "13.02", "13.03", "13.01", "14.01", "14.02", "14.03", "15.02", "15.01", "16.02", "16.03", "17.01", "17.02", "18.01", "19.01", "20.01", "20.02", "21.01", "21.03", "21.02", "23.01", "23.02", "24.01", "24.02", "25.01", "25.02", "26.01", "26.02", "26.03", "27.01", "28.05", "28.02", "28.03", "28.04", "28.01", "29.01", "30.01", "30.07", "30.03", "30.05", "30.08", "30.06", "30.02", "30.04", "31.01", "32.01"]
+---
+>>>>>>> c28b956276cfcddf13e8f2859a2ec5125fea83ed
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 
@@ -59,9 +68,9 @@ library(DT)
 library(data.table)
 
 Base_zona_subset <- subset(Base_zona, select = c(nom_mun, cvegeo))
+
 # Cambiar nombres de columnas
 setnames(Base_zona_subset, c("Nombre", "Clave"))
-
 datatable(Base_zona_subset, 
           caption = "Municipios",
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
@@ -197,5 +206,202 @@ piramide
 
 ### Datos económicos.
 
+```{r}
+library(shiny)
+library(DT)
+library(data.table)
+
+# UI
+ui <- fluidPage(
+  
+  # Selección del año
+  selectInput("year", "Selecciona el año:",
+              choices = c("1999", "2004", "2009", "2014", "2019"),
+              selected = "1999"),
+  
+  # Tablas
+  tabsetPanel(
+    tabPanel("UE", dataTableOutput("table_ue")),
+    tabPanel("AF", dataTableOutput("table_af")),
+    tabPanel("FB", dataTableOutput("table_fb")),
+    tabPanel("PB", dataTableOutput("table_pb")),
+    tabPanel("PO", dataTableOutput("table_po")),
+    tabPanel("RE", dataTableOutput("table_re")),
+    tabPanel("VA", dataTableOutput("table_va"))
+  )
+)
+
+server <- function(input, output) {
+  
+  # Filtrar variables según el año seleccionado
+  
+  vars_ue.99 <- c("ue.com_99", "ue.con_99", "ue.man_99", "ue.pri_99",   "ue.ser_99")
+  vars_ue.04 <- c("ue.com_04", "ue.con_04", "ue.man_04", "ue.pri_04",   "ue.ser_04")
+  vars_ue.09 <- c("ue.com_09", "ue.con_09", "ue.man_09", "ue.pri_09",   "ue.ser_09")
+  vars_ue.14 <- c("ue.com_14", "ue.con_14", "ue.man_14", "ue.pri_14",   "ue.ser_14")
+   vars_ue.19 <- c("ue.com_19", "ue.con_19", "ue.man_19", "ue.pri_19",   "ue.ser_19")
+   
+  vars_af.99 <- c("af.com_99", "af.con_99", "af.man_99", "af.pri_99",   "af.ser_99")
+  vars_af.04 <- c("af.com_04", "af.con_04", "af.man_04", "af.pri_04",   "af.ser_04")
+  vars_af.09 <- c("af.com_09", "af.con_09", "af.man_09", "af.pri_09",   "af.ser_09")
+  vars_af.14 <- c("af.com_14", "af.con_14", "af.man_14", "af.pri_14",   "af.ser_14")
+  vars_af.19 <- c("af.com_19", "af.con_19", "af.man_19", "af.pri_19",   "af.ser_19")
+  
+ vars_fb.99 <- c("fb.com_99", "fb.con_99", "fb.man_99", "fb.pri_99", "fb.ser_99")
+vars_fb.04 <- c("fb.com_04", "fb.con_04", "fb.man_04", "fb.pri_04", "fb.ser_04")
+vars_fb.09 <- c("fb.com_09", "fb.con_09", "fb.man_09", "fb.pri_09", "fb.ser_09")
+vars_fb.14 <- c("fb.com_14", "fb.con_14", "fb.man_14", "fb.pri_14", "fb.ser_14")
+vars_fb.19 <- c("fb.com_19", "fb.con_19", "fb.man_19", "fb.pri_19", "fb.ser_19")
+
+vars_pb.99 <- c("pb.com_99", "pb.con_99", "pb.man_99", "pb.pri_99", "pb.ser_99")
+vars_pb.04 <- c("pb.com_04", "pb.con_04", "pb.man_04", "pb.pri_04", "pb.ser_04")
+vars_pb.09 <- c("pb.com_09", "pb.con_09", "pb.man_09", "pb.pri_09", "pb.ser_09")
+vars_pb.14 <- c("pb.com_14", "pb.con_14", "pb.man_14", "pb.pri_14", "pb.ser_14")
+vars_pb.19 <- c("pb.com_19", "pb.con_19", "pb.man_19", "pb.pri_19", "pb.ser_19")
+
+vars_po.99 <- c("po.com_99", "po.con_99", "po.man_99", "po.pri_99", "po.ser_99")
+vars_po.04 <- c("po.com_04", "po.con_04", "po.man_04", "po.pri_04", "po.ser_04")
+vars_po.09 <- c("po.com_09", "po.con_09", "po.man_09", "po.pri_09", "po.ser_09")
+vars_po.14 <- c("po.com_14", "po.con_14", "po.man_14", "po.pri_14", "po.ser_14")
+vars_po.19 <- c("po.com_19", "po.con_19", "po.man_19", "po.pri_19", "po.ser_19")
+
+vars_re.99 <- c("re.com_99", "re.con_99", "re.man_99", "re.pri_99", "re.ser_99")
+vars_re.04 <- c("re.com_04", "re.con_04", "re.man_04", "re.pri_04", "re.ser_04")
+vars_re.09 <- c("re.com_09", "re.con_09", "re.man_09", "re.pri_09", "re.ser_09")
+vars_re.14 <- c("re.com_14", "re.con_14", "re.man_14", "re.pri_14", "re.ser_14")
+vars_re.19 <- c("re.com_19", "re.con_19", "re.man_19", "re.pri_19", "re.ser_19")
+
+vars_va.99 <- c("va.com_99", "va.con_99", "va.man_99", "va.pri_99", "va.ser_99")
+vars_va.04 <- c("va.com_04", "va.con_04", "va.man_04", "va.pri_04", "va.ser_04")
+vars_va.09 <- c("va.com_09", "va.con_09", "va.man_09", "va.pri_09", "va.ser_09")
+vars_va.14 <- c("va.com_14", "va.con_14", "va.man_14", "va.pri_14", "va.ser_14")
+vars_va.19 <- c("va.com_19", "va.con_19", "va.man_19", "va.pri_19", "va.ser_19")
+
+  # Obtener los datos de la base según el año y variables seleccionadas
+  
+  filtered_data_ue <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_ue.99,
+                                                 "2004" = vars_ue.04,
+                                                 "2009" = vars_ue.09,
+                                                 "2014" = vars_ue.14,
+                                                 "2019" = vars_ue.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_af <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_af.99,
+                                                 "2004" = vars_af.04,
+                                                 "2009" = vars_af.09,
+                                                 "2014" = vars_af.14,
+                                                 "2019" = vars_af.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_fb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_fb.99,
+                                                 "2004" = vars_fb.04,
+                                                 "2009" = vars_fb.09,
+                                                 "2014" = vars_fb.14,
+                                                 "2019" = vars_fb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_pb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_pb.99,
+                                                 "2004" = vars_pb.04,
+                                                 "2009" = vars_pb.09,
+                                                 "2014" = vars_pb.14,
+                                                 "2019" = vars_pb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_po <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_po.99,
+                                                 "2004" = vars_po.04,
+                                                 "2009" = vars_po.09,
+                                                 "2014" = vars_po.14,
+                                                 "2019" = vars_po.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_re <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_re.99,
+                                                 "2004" = vars_re.04,
+                                                 "2009" = vars_re.09,
+                                                 "2014" = vars_re.14,
+                                                 "2019" = vars_re.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_va <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_va.99,
+                                                 "2004" = vars_va.04,
+                                                 "2009" = vars_va.09,
+                                                 "2014" = vars_va.14,
+                                                 "2019" = vars_va.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+# Cambiar nombres de columnas
+  
+  output$table_ue <- renderDataTable({
+    setNames(filtered_data_ue(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
+  },
+  caption = "Unidades económicas",
+  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+  rownames = FALSE,
+  width = "40%")
+  
+  output$table_af <- renderDataTable({
+    setNames(filtered_data_af(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
+  },
+  caption = "Activos fijos",
+  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+  rownames = FALSE,
+  width = "40%")
+  
+  output$table_fb <- renderDataTable({
+    setNames(filtered_data_fb(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
+  },
+  caption = "Producción bruta",
+  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+  rownames = FALSE,
+  width = "40%")
+  
+  output$table_pb <- renderDataTable({
+    setNames(filtered_data_pb(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
+  },
+  caption = "Personal ocupado",
+  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+  rownames = FALSE,
+  width = "40%")
+  
+  output$table_po <- renderDataTable({
+    setNames(filtered_data_po(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
+  },
+  caption = "Remuneraciones totales",
+  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+  rownames = FALSE,
+  width = "40%")
+  
+  output$table_re <- renderDataTable({
+    setNames(filtered_data_re(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
+  },
+  caption = "Valor agregado censal bruto",
+  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+  rownames = FALSE,
+  width = "40%")
+}
+
+# Ejecutar la aplicación
+shinyApp(ui = ui, server = server)
+```
 
 
