@@ -17,18 +17,6 @@ Base_unica <- read_excel("Bases de datos\\Base única.xlsx")
 
 ```
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
-#Tabla con los nombres y claves de ZM
-library(dplyr)
-library(openxlsx)
-
-tabla_unica <- Base_unica %>% 
-  select(NOM_ZM, CVE_ZM) %>% 
-  unique()
-View(tabla_unica)
-
-```
-
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Obtener el nombre de todas las variables en la base de datos
@@ -108,7 +96,7 @@ A continuación se presentan algunos datos generales sobre esta zona:
 - Número de municipios: ``r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE]) ``
 - Población total: ``r format(sum(Base_zona$POBTOT), big.mark=",") ``
 - Superficie de la ZM: ``r sum(round(area_km2, 2)) ``
-- Densidad poblacional: ``r sum(Base_zona$POBTOT)/sum(round(area_km2, 2))`` Hab/Km^2.
+- Densidad poblacional: ``r round(sum(Base_zona$POBTOT)/sum(round(area_km2, 2)),digits= 3)`` Hab/Km^2.
 - Grado promedio de escolaridad: ``r sum(Base_zona$GRAPROES)/nrow(Base_zona)``
 - Población urbana:
 - Pobalción rural:
@@ -210,7 +198,7 @@ tmap::tm_shape(municipios_unidos) +
 - Población total respecto al país: ``r round(sum(Base_zona$POBTOT) / sum(Base_unica$POBTOT), digits = 3) %>% percent()``
 - Población Masculina:  ``r round(sum(Base_zona$POBMAS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
 - Población Femenina: ``r round(sum(Base_zona$POBFEM) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Relación M-F: ``r sum(Base_zona$REL_H_M)/nrow(Base_zona) ``
+- Relación M-F: ``r round(sum(Base_zona$REL_H_M)/nrow(Base_zona),digits= 3) ``
 
 
 ```{r eval=FALSE, fig.height=4, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
@@ -224,46 +212,42 @@ Base_zona$cvegeo <- sprintf("%05d", Base_zona$cvegeo)
 
 En el censo de Población y Vivienda del año 2020 los principales resultados para las viviendas son los siguientes:
 
-- Número de viviendas habitadas: 
-- Porcentaje de viviendas desocupadas:
-- Promedio de ocupantes por vivienda: 
-- Promedio de ocupantes por cuarto:
-- Porcentaje de viviendas con servicios básicos1:
-- Porcentaje de viviendas sin bienes2: 
-- Porcentaje de ocupantes en viviendas particulares que disponen de energía eléctrica, agua entubada y drenaje: 
-- Porcentaje de viviendas particulares habitadas que no disponen de refrigerador ni lavadora: 
-- Porcentaje de viviendas particulares habitadas sin tecnologías de la información y la comunicación (TIC): 
+- Número de viviendas habitadas: ``r format(sum(Base_zona$TVIVHAB), scientific = FALSE, digits = 3) ``
+- Porcentaje de viviendas desocupadas:``r round(sum(Base_zona$VIVPAR_DES) / sum(Base_zona$VIVTOT), digits = 3) %>% percent()``
+- Promedio de ocupantes por vivienda: ``r round (sum(Base_zona$PROM_OCUP)/nrow(Base_zona), digits = 3)``
+- Promedio de ocupantes por cuarto:``r sum(Base_zona$PRO_OCUP_C)/nrow(Base_zona)``
+- Porcentaje de viviendas con servicios básicos:``r round(sum(Base_zona$VPH_C_SERV) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()``
+- Porcentaje de viviendas sin bienes2: ``r round(sum(Base_zona$VPH_SNBIEN) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()``
+- Porcentaje de ocupantes en viviendas particulares que disponen de energía eléctrica, agua entubada y drenaje: ``r round(sum(Base_zona$VPH_SNBIEN) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()``
 
 #### Socioeconómicos
 
 Los datos del Censo de Población y Vivienda 2020 presentan los siguientes datos para caracterizar la población desde el punto de vista de su actividad económica:
 
-- Porcentaje de población de 12 años y más económicamente activa: 
-- Porcentaje de población de 12 años y más no económicamente activa: 
-- Porcentaje de población de 12 años y más ocupada sin escolaridad:
-- Porcentaje de población de 12 años y más ocupada con al menos un grado aprobado en primaria: 
-- Porcentaje de población de 12 años y más ocupada con secundaria o equivalente incompleta: 
-- Porcentaje de población de 12 años y más ocupada con al menos un grado aprobado en educación media superior: 
+- Porcentaje de población de 12 años y más económicamente activa: ``r round(sum(Base_zona$PEA) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+- Porcentaje de población de 12 años y más no económicamente activa: ``r round(sum(Base_zona$PE_INAC) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+` 
 
 #### Educación
 
-Según los datos del Censo de Población y Vivienda 2020, la educación del municipio se caracteriza por los siguientes estadísticos:
+Según los datos del Censo de Población y Vivienda 2020, la educación de la zona metropolitana se caracteriza por los siguientes estadísticos:
 
-- Porcentaje de población de 15 años y más sin escolaridad: 
-- Porcentaje de población de 15 años y más con educación básica completa: 
-- Porcentaje de población masculina de 18 años y más con al menos un grado aprobado en educación media superior:
-- Porcentaje de población de 25 años y más con al menos un grado aprobado en educación superior: 
+- Porcentaje de población de 15 años y más sin escolaridad:``r round(sum(Base_zona$P15YM_SE) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+- Porcentaje de población de 15 años y más con al menos un grado aprobado en primaria: ``r round(1-(sum(Base_zona$PE_INAC) / sum(Base_zona$POBTOT)), digits = 3) %>% percent()``
+- Porcentaje de población de 15 años y más con educación básica completa: ``r round(sum(Base_zona$P15SEC_CO) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`` 
+- Porcentaje de población de 15 años y más con secundaria o equivalente incompleta:``r round(sum(Base_zona$P15SEC_IN) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`` 
+- Porcentaje de población de 18 años y más ocupada con al menos un grado aprobado en educación media superior: ``r round(sum(Base_zona$P18YM_PB) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
 
 #### Salud
 
 En el Censo del año 2020, se manifiesta que la situación de la afiliación es la siguiente:
 
-- Porcentaje de población afiliada a servicios de salud: 
-- Población sin afiliación a servicios de salud: 
+- Porcentaje de población afiliada a servicios de salud: ``r round(sum(Base_zona$PDER_SS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+- Población sin afiliación a servicios de salud:``r format(sum(Base_zona$PSINDER), scientific = FALSE, digits = 3)`` 
 
 ### Datos económicos.
 
-```{r echo=FALSE}
+```{r eval=FALSE, include=FALSE}
 library(shiny)
 library(DT)
 library(data.table)
