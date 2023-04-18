@@ -6,8 +6,8 @@ date: "4 de abril de 2023"
 output: 
   html_document:
     theme: cerulean
-  params:
-    zona: "1.01"
+params:
+  zona: "1.01"
 ---
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
@@ -46,11 +46,7 @@ Base_zona <- Base_unica[Base_unica$CVE_ZM == params$zona, variables_utilizar]
 La ficha de información metropolitana es un recurso valioso para la planificación territorial en zonas metropolitanas. En ella se incluyen datos censales en diversos formatos, como gráficas, tablas y mapas provenientes principalmente de los censos económicos de los años 1999, 2004, 2009, 2014 y 2019. A su vez, también incluye información de los censos de población y vivienda del año 2020, ambos censos son publicados por el Instituto Nacional de Estadística y Geografía (INEGI).\ 
 
 # Ficha básica de la Zona Metropolitana de ``r unique(Base_zona$NOM_ZM) ``
-
-A continuación se presentan los datos sociodemograficos principales de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` con la clave``r params$zona ``. 
-
-- La zona se compone de un total de ``r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE]) `` municipios, los cuales son: 
-
+Según INEGI, las zonas metropolitanas son aquellas áreas urbanas que se componen de una ciudad principal (núcleo urbano) y su zona conurbada. Estas áreas urbanas se caracterizan por tener una alta densidad de población y estar interconectadas por vías de transporte y comunicación.La zona metropolitana de ``r unique(Base_zona$NOM_ZM) ``, se localiza en ``r unique(Base_zona$nom_ent) ``. La zona se compone de un total de ``r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE]) `` municipios, los cuales son:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap= "Municipios de la zona metropolitana", fig.width=4, fig.height=4}
 
@@ -98,7 +94,6 @@ tmap::tm_shape(municipios_zm) +
   tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
 ```
 
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Calcula el área en unidades del objeto sf
 area <- st_area(municipios_zm)
@@ -106,48 +101,22 @@ area <- st_area(municipios_zm)
 # Convierte el área a kilómetros cuadrados
 area_km2 <- area / 1000000
 ```
-###Información sociodemografica
 
-##### Composición, estructura y distribución de la población
+A continuación se presentan algunos datos generales sobre esta zona:
 
-La zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` tiene una pobalción de ``r format(sum(Base_zona$POBTOT), big.mark=",") `` de habitantes, según el Censo de Población y Vivienda 2020. La composición de la población se describe en los siguientes puntos:
-
-- Población total respecto al país: ``r round(sum(Base_zona$POBTOT) / sum(Base_unica$POBTOT), digits = 3) %>% percent()``
-- Población Masculina:  ``r round(sum(Base_zona$POBMAS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Población Femenina: ``r round(sum(Base_zona$POBFEM) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Relación M-F: ``r sum(Base_zona$REL_H_M)/nrow(Base_zona) ``
+- ZM:``r unique(Base_zona$NOM_ZM) ``
+- Número de municipios: ``r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE]) ``
+- Población total: ``r format(sum(Base_zona$POBTOT), big.mark=",") ``
+- Superficie de la ZM: ``r sum(round(area_km2, 2)) ``
+- Densidad poblacional: ``r sum(Base_zona$POBTOT)/sum(round(area_km2, 2))`` Hab/Km^2.
 - Grado promedio de escolaridad: ``r sum(Base_zona$GRAPROES)/nrow(Base_zona)``
-- Densisad poblacional ``r sum(Base_zona$POBTOT)/sum(round(area_km2, 2))``
-
-```{r eval=FALSE, fig.height=4, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
-
-# Agregar un cero a la izquierda de la variable cvegeo
-
-Base_zona$cvegeo <- sprintf("%05d", Base_zona$cvegeo)
-```
+- Población urbana:
+- Pobalción rural:
 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.width=4, fig.height=4, fig.cap= "Distribución poblacional"}
-# Seleccionar las variables de interés y unirlas con la cartografía por la clave cvegeo
-municipios_unidos <- municipios_zm %>%
-  inner_join(Base_zona %>% select(cvegeo, POBTOT, POBFEM, POBMAS), by = "cvegeo")
+### Estructura de la población.
 
-tmap_mode("view")
-# Definir el número de clases en el mapa temático
-if (nrow(municipios_unidos) < 5) {
-  num_classes <- nrow(municipios_unidos)
-} else {
-  num_classes <- 5
-}
-
-# Crear el mapa temático
-tmap::tm_shape(municipios_unidos) +
-  tmap::tm_borders() +
-  tmap::tm_fill("POBTOT", alpha = 0.9, title = "Población", style ="equal", n = num_classes) +
-  tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
-```
-
-- La estructura de población de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` presenta en la siguiente piramide poblacional:
+La Estructura de Población de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` presenta la siguiente forma:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=4}
 #Piramide poblacional
@@ -196,23 +165,101 @@ tabla_poblacion$poblacion<- ifelse(tabla_poblacion$genero == "M", -1*tabla_pobla
 tabla_poblacion$edad <- factor(tabla_poblacion$edad, levels = unique(tabla_poblacion$edad))
 
 ## Los gráficos piramidales son dos gráficos de barras con ejes invertidos
-piramide <- ggplot(tabla_poblacion, aes(x = edad, y = poblacion)) +
+piramide <- ggplot(tabla_poblacion, aes(x = edad, y = poblacion), ) +
   geom_bar(data = subset(tabla_poblacion, genero == "F"), aes(fill = "F"), stat = "identity") +
   geom_bar(data = subset(tabla_poblacion, genero == "M"), aes(fill = "M"), stat = "identity") +
-  scale_fill_manual(values=c("F"="pink","M"="blue")) +
+  scale_fill_manual(values=c("F"="#bc4ed8","M"="#1b004b")) +
   scale_y_continuous(labels = paste0(as.character(c(seq(2, 0, -1), seq(1, 2, 1))), "m"))  +
   coord_flip()+
-  labs(fill = "Sexo", x = "Edad", y = "Población")
+  labs(fill = "Sexo", x = "Edad", y = "Población") +
+  ggtitle("Gráfico Piramidal de Población")
 
 piramide
 
 ```
 
-##### Indices de envejecimiento, juventud y tasa de dependencia
+:Fuente: Elaboración propia con datos de CPV (2020)
 
-##### Migración
 
-##### Indice de Desarrollo Humano (IDH), Índice de Marginación (IM) e Índice de Rezago Social (IRS).
+La población esta distribuida de la siguiente forma: 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.width=4, fig.height=4, fig.cap= "Distribución poblacional"}
+# Seleccionar las variables de interés y unirlas con la cartografía por la clave cvegeo
+municipios_unidos <- municipios_zm %>%
+  inner_join(Base_zona %>% select(cvegeo, POBTOT, POBFEM, POBMAS), by = "cvegeo")
+
+tmap_mode("view")
+# Definir el número de clases en el mapa temático
+if (nrow(municipios_unidos) < 5) {
+  num_classes <- nrow(municipios_unidos)
+} else {
+  num_classes <- 5
+}
+
+# Crear el mapa temático
+tmap::tm_shape(municipios_unidos) +
+  tmap::tm_borders() +
+  tmap::tm_fill("POBTOT", alpha = 0.9, title = "Población", style ="equal", n = num_classes) +
+  tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
+```
+
+:Fuente: Elaboración propia con datos de CPV (2020)
+
+#### Grupos de pobalción
+
+- Población total respecto al país: ``r round(sum(Base_zona$POBTOT) / sum(Base_unica$POBTOT), digits = 3) %>% percent()``
+- Población Masculina:  ``r round(sum(Base_zona$POBMAS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+- Población Femenina: ``r round(sum(Base_zona$POBFEM) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+- Relación M-F: ``r sum(Base_zona$REL_H_M)/nrow(Base_zona) ``
+
+
+```{r eval=FALSE, fig.height=4, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
+
+# Agregar un cero a la izquierda de la variable cvegeo
+
+Base_zona$cvegeo <- sprintf("%05d", Base_zona$cvegeo)
+```
+
+#### Vivienda
+
+En el censo de Población y Vivienda del año 2020 los principales resultados para las viviendas son los siguientes:
+
+- Número de viviendas habitadas: 
+- Porcentaje de viviendas desocupadas:
+- Promedio de ocupantes por vivienda: 
+- Promedio de ocupantes por cuarto:
+- Porcentaje de viviendas con servicios básicos1:
+- Porcentaje de viviendas sin bienes2: 
+- Porcentaje de ocupantes en viviendas particulares que disponen de energía eléctrica, agua entubada y drenaje: 
+- Porcentaje de viviendas particulares habitadas que no disponen de refrigerador ni lavadora: 
+- Porcentaje de viviendas particulares habitadas sin tecnologías de la información y la comunicación (TIC): 
+
+#### Socioeconómicos
+
+Los datos del Censo de Población y Vivienda 2020 presentan los siguientes datos para caracterizar la población desde el punto de vista de su actividad económica:
+
+- Porcentaje de población de 12 años y más económicamente activa: 
+- Porcentaje de población de 12 años y más no económicamente activa: 
+- Porcentaje de población de 12 años y más ocupada sin escolaridad:
+- Porcentaje de población de 12 años y más ocupada con al menos un grado aprobado en primaria: 
+- Porcentaje de población de 12 años y más ocupada con secundaria o equivalente incompleta: 
+- Porcentaje de población de 12 años y más ocupada con al menos un grado aprobado en educación media superior: 
+
+#### Educación
+
+Según los datos del Censo de Población y Vivienda 2020, la educación del municipio se caracteriza por los siguientes estadísticos:
+
+- Porcentaje de población de 15 años y más sin escolaridad: 
+- Porcentaje de población de 15 años y más con educación básica completa: 
+- Porcentaje de población masculina de 18 años y más con al menos un grado aprobado en educación media superior:
+- Porcentaje de población de 25 años y más con al menos un grado aprobado en educación superior: 
+
+#### Salud
+
+En el Censo del año 2020, se manifiesta que la situación de la afiliación es la siguiente:
+
+- Porcentaje de población afiliada a servicios de salud: 
+- Población sin afiliación a servicios de salud: 
 
 ### Datos económicos.
 
@@ -413,5 +460,4 @@ vars_va.19 <- c("va.com_19", "va.con_19", "va.man_19", "va.pri_19", "va.ser_19")
 # Ejecutar la aplicación
 shinyApp(ui = ui, server = server)
 ```
-
 

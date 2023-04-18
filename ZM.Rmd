@@ -1,7 +1,5 @@
 ---
 title: "Zonas metropolitanas de México"
-author: "Alvaro Martínez"
-date: "2023-04-14"
 output:
   html_document:
     theme: cerulean
@@ -13,18 +11,19 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 ```
 
-
-### Zonas metropolitanas
-
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 #Tabla con los nombres y claves de ZM
 library(dplyr)
 library(openxlsx)
+library(readxl)
+library(kableExtra)
 tabla_unica <- read_excel("Bases de datos/tabla_unica.xlsx") %>%
   select(NOM_ZM, CVE_ZM) %>% 
   unique()
 
-kable(tabla_unica)
+
+# Mostrar tabla con encabezados personalizados
+kable(tabla_unica, col.names = c("Nombre", "Clave"))
 
 ```
