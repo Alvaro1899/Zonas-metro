@@ -246,8 +246,9 @@ En el Censo del año 2020, se manifiesta que la situación de la afiliación es 
 - Población sin afiliación a servicios de salud:``r format(sum(Base_zona$PSINDER), scientific = FALSE, digits = 3)`` 
 
 ### Datos económicos.
+#### *Variables económicas*
 
-```{r eval=FALSE, include=FALSE}
+```{r}
 library(shiny)
 library(DT)
 library(data.table)
@@ -276,47 +277,47 @@ server <- function(input, output) {
   
   # Filtrar variables según el año seleccionado
   
-  vars_ue.99 <- c("ue.com_99", "ue.con_99", "ue.man_99", "ue.pri_99",   "ue.ser_99")
-  vars_ue.04 <- c("ue.com_04", "ue.con_04", "ue.man_04", "ue.pri_04",   "ue.ser_04")
-  vars_ue.09 <- c("ue.com_09", "ue.con_09", "ue.man_09", "ue.pri_09",   "ue.ser_09")
-  vars_ue.14 <- c("ue.com_14", "ue.con_14", "ue.man_14", "ue.pri_14",   "ue.ser_14")
-   vars_ue.19 <- c("ue.com_19", "ue.con_19", "ue.man_19", "ue.pri_19",   "ue.ser_19")
+  vars_ue.99 <- c("ue.pri_99", "ue.con_99", "ue.man_99", "ue.com_99", "ue.ser_99")
+  vars_ue.04 <- c("ue.pri_04", "ue.con_04", "ue.man_04", "ue.com_04", "ue.ser_04")
+  vars_ue.09 <- c("ue.pri_09", "ue.con_09", "ue.man_09", "ue.com_09", "ue.ser_09")
+  vars_ue.14 <- c("ue.pri_14", "ue.con_14", "ue.man_14", "ue.com_14", "ue.ser_14")
+  vars_ue.19 <- c("ue.pri_19", "ue.con_19", "ue.man_19", "ue.com_19", "ue.ser_19")
    
-  vars_af.99 <- c("af.com_99", "af.con_99", "af.man_99", "af.pri_99",   "af.ser_99")
-  vars_af.04 <- c("af.com_04", "af.con_04", "af.man_04", "af.pri_04",   "af.ser_04")
-  vars_af.09 <- c("af.com_09", "af.con_09", "af.man_09", "af.pri_09",   "af.ser_09")
-  vars_af.14 <- c("af.com_14", "af.con_14", "af.man_14", "af.pri_14",   "af.ser_14")
-  vars_af.19 <- c("af.com_19", "af.con_19", "af.man_19", "af.pri_19",   "af.ser_19")
+  vars_af.99 <- c("af.pri_99", "af.con_99", "af.man_99", "af.com_99", "af.ser_99")
+  vars_af.04 <- c("af.pri_04", "af.con_04", "af.man_04", "af.com_04", "af.ser_04")
+  vars_af.09 <- c("af.pri_09", "af.con_09", "af.man_09", "af.com_09", "af.ser_09")
+  vars_af.14 <- c("af.pri_14", "af.con_14", "af.man_14", "af.com_14", "af.ser_14")
+  vars_af.19 <- c("af.pri_19", "af.con_19", "af.man_19", "af.com_19", "af.ser_19")
+
+  vars_fb.99 <- c("fb.pri_99", "fb.con_99", "fb.man_99", "fb.com_99", "fb.ser_99")
+  vars_fb.04 <- c("fb.pri_04", "fb.con_04", "fb.man_04", "fb.com_04", "fb.ser_04")
+  vars_fb.09 <- c("fb.pri_09", "fb.con_09", "fb.man_09", "fb.com_09", "fb.ser_09")
+  vars_fb.14 <- c("fb.pri_14", "fb.con_14", "fb.man_14", "fb.com_14", "fb.ser_14")
+  vars_fb.19 <- c("fb.pri_19", "fb.con_19", "fb.man_19", "fb.com_19", "fb.ser_19")
+
+  vars_pb.99 <- c("pb.pri_99", "pb.con_99", "pb.man_99", "pb.com_99", "pb.ser_99")
+  vars_pb.04 <- c("pb.pri_04", "pb.con_04", "pb.man_04", "pb.com_04", "pb.ser_04")
+  vars_pb.09 <- c("pb.pri_09", "pb.con_09", "pb.man_09", "pb.com_09", "pb.ser_09")
+  vars_pb.14 <- c("pb.pri_14", "pb.con_14", "pb.man_14", "pb.com_14", "pb.ser_14")
+  vars_pb.19 <- c("pb.pri_19", "pb.con_19", "pb.man_19", "pb.com_19", "pb.ser_19")
   
- vars_fb.99 <- c("fb.com_99", "fb.con_99", "fb.man_99", "fb.pri_99", "fb.ser_99")
-vars_fb.04 <- c("fb.com_04", "fb.con_04", "fb.man_04", "fb.pri_04", "fb.ser_04")
-vars_fb.09 <- c("fb.com_09", "fb.con_09", "fb.man_09", "fb.pri_09", "fb.ser_09")
-vars_fb.14 <- c("fb.com_14", "fb.con_14", "fb.man_14", "fb.pri_14", "fb.ser_14")
-vars_fb.19 <- c("fb.com_19", "fb.con_19", "fb.man_19", "fb.pri_19", "fb.ser_19")
+  vars_po.99 <- c("po.pri_99", "po.con_99", "po.man_99", "po.com_99", "po.ser_99")
+  vars_po.04 <- c("po.pri_04", "po.con_04", "po.man_04", "po.com_04", "po.ser_04")
+  vars_po.09 <- c("po.pri_09", "po.con_09", "po.man_09", "po.com_09", "po.ser_09")
+  vars_po.14 <- c("po.pri_14", "po.con_14", "po.man_14", "po.com_14", "po.ser_14")
+  vars_po.19 <- c("po.pri_19", "po.con_19", "po.man_19", "po.com_19", "po.ser_19")
 
-vars_pb.99 <- c("pb.com_99", "pb.con_99", "pb.man_99", "pb.pri_99", "pb.ser_99")
-vars_pb.04 <- c("pb.com_04", "pb.con_04", "pb.man_04", "pb.pri_04", "pb.ser_04")
-vars_pb.09 <- c("pb.com_09", "pb.con_09", "pb.man_09", "pb.pri_09", "pb.ser_09")
-vars_pb.14 <- c("pb.com_14", "pb.con_14", "pb.man_14", "pb.pri_14", "pb.ser_14")
-vars_pb.19 <- c("pb.com_19", "pb.con_19", "pb.man_19", "pb.pri_19", "pb.ser_19")
+  vars_re.99 <- c("re.pri_99", "re.con_99", "re.man_99", "re.com_99", "re.ser_99")
+  vars_re.04 <- c("re.pri_04", "re.con_04", "re.man_04", "re.com_04", "re.ser_04")
+  vars_re.09 <- c("re.pri_09", "re.con_09", "re.man_09", "re.com_09", "re.ser_09")
+  vars_re.14 <- c("re.pri_14", "re.con_14", "re.man_14", "re.com_14", "re.ser_14")
+  vars_re.19 <- c("re.pri_19", "re.con_19", "re.man_19", "re.com_19", "re.ser_19")
 
-vars_po.99 <- c("po.com_99", "po.con_99", "po.man_99", "po.pri_99", "po.ser_99")
-vars_po.04 <- c("po.com_04", "po.con_04", "po.man_04", "po.pri_04", "po.ser_04")
-vars_po.09 <- c("po.com_09", "po.con_09", "po.man_09", "po.pri_09", "po.ser_09")
-vars_po.14 <- c("po.com_14", "po.con_14", "po.man_14", "po.pri_14", "po.ser_14")
-vars_po.19 <- c("po.com_19", "po.con_19", "po.man_19", "po.pri_19", "po.ser_19")
-
-vars_re.99 <- c("re.com_99", "re.con_99", "re.man_99", "re.pri_99", "re.ser_99")
-vars_re.04 <- c("re.com_04", "re.con_04", "re.man_04", "re.pri_04", "re.ser_04")
-vars_re.09 <- c("re.com_09", "re.con_09", "re.man_09", "re.pri_09", "re.ser_09")
-vars_re.14 <- c("re.com_14", "re.con_14", "re.man_14", "re.pri_14", "re.ser_14")
-vars_re.19 <- c("re.com_19", "re.con_19", "re.man_19", "re.pri_19", "re.ser_19")
-
-vars_va.99 <- c("va.com_99", "va.con_99", "va.man_99", "va.pri_99", "va.ser_99")
-vars_va.04 <- c("va.com_04", "va.con_04", "va.man_04", "va.pri_04", "va.ser_04")
-vars_va.09 <- c("va.com_09", "va.con_09", "va.man_09", "va.pri_09", "va.ser_09")
-vars_va.14 <- c("va.com_14", "va.con_14", "va.man_14", "va.pri_14", "va.ser_14")
-vars_va.19 <- c("va.com_19", "va.con_19", "va.man_19", "va.pri_19", "va.ser_19")
+  vars_va.99 <- c("va.pri_99", "va.con_99", "va.man_99", "va.com_99", "va.ser_99")
+  vars_va.04 <- c("va.pri_04", "va.con_04", "va.man_04", "va.com_04", "va.ser_04")
+  vars_va.09 <- c("va.pri_09", "va.con_09", "va.man_09", "va.com_09", "va.ser_09")
+  vars_va.14 <- c("va.pri_14", "va.con_14", "va.man_14", "va.com_14", "va.ser_14")
+  vars_va.19 <- c("va.pri_19", "va.con_19", "va.man_19", "va.com_19", "va.ser_19")
 
   # Obtener los datos de la base según el año y variables seleccionadas
   
@@ -392,56 +393,856 @@ vars_va.19 <- c("va.com_19", "va.con_19", "va.man_19", "va.pri_19", "va.ser_19")
   
 # Cambiar nombres de columnas
   
-  output$table_ue <- renderDataTable({
-    setNames(filtered_data_ue(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
-  },
-  caption = "Unidades económicas",
-  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-  rownames = FALSE,
-  width = "40%")
+output$table_ue <- renderDataTable({
+  data <- filtered_data_ue()
+  data[] <- lapply(data, function(x) format(x, big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Unidades económicas",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_af <- renderDataTable({
+  data <- filtered_data_af()
+  data[] <- lapply(data, function(x) format(x, big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Activiso fijos totales (miles de pesos)",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_fb <- renderDataTable({
+  data <- filtered_data_fb()
+  data[] <- lapply(data, function(x) format(x, big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Formación bruta de capital fijo (miles de pesos)",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
   
-  output$table_af <- renderDataTable({
-    setNames(filtered_data_af(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
-  },
-  caption = "Activos fijos",
-  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-  rownames = FALSE,
-  width = "40%")
+output$table_pb <- renderDataTable({
+  data <- filtered_data_pb()
+  data[] <- lapply(data, function(x) format(x, big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Producción bruta total (miles de pesos)",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_po <- renderDataTable({
+  data <- filtered_data_po()
+  data[] <- lapply(data, function(x) format(x, big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Personal ocupado total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_re <- renderDataTable({
+  data <- filtered_data_re()
+  data[] <- lapply(data, function(x) format(x, big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Remueraciones totales (miles de pesos)",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
   
-  output$table_fb <- renderDataTable({
-    setNames(filtered_data_fb(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
-  },
-  caption = "Producción bruta",
-  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-  rownames = FALSE,
-  width = "40%")
+  output$table_va <- renderDataTable({
+  data <- filtered_data_va()
+  data[] <- lapply(data, function(x) format(x, big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Valor agregado censal bruto (miles de pesos)",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
   
-  output$table_pb <- renderDataTable({
-    setNames(filtered_data_pb(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
-  },
-  caption = "Personal ocupado",
-  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-  rownames = FALSE,
-  width = "40%")
+}
+
+# Ejecutar la aplicación
+shinyApp(ui = ui, server = server)
+```
+#### *Coeficientes de Localización Económica (QL)*
+
+```{r}
+
+# UI
+ui <- fluidPage(
   
-  output$table_po <- renderDataTable({
-    setNames(filtered_data_po(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
-  },
-  caption = "Remuneraciones totales",
-  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-  rownames = FALSE,
-  width = "40%")
+  # Selección del año
+  selectInput("year", "Selecciona el año:",
+              choices = c("1999", "2004", "2009", "2014", "2019"),
+              selected = "1999"),
   
-  output$table_re <- renderDataTable({
-    setNames(filtered_data_re(), c("Nombre", "Clave", "Comercio", "Construcción", "Manufactura", "Primarios", "Servicios"))
-  },
-  caption = "Valor agregado censal bruto",
-  options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-  rownames = FALSE,
-  width = "40%")
+  # Tablas
+  tabsetPanel(
+    tabPanel("UE", dataTableOutput("table_QLue")),
+    tabPanel("AF", dataTableOutput("table_QLaf")),
+    tabPanel("FB", dataTableOutput("table_QLfb")),
+    tabPanel("PB", dataTableOutput("table_QLpb")),
+    tabPanel("PO", dataTableOutput("table_QLpo")),
+    tabPanel("RE", dataTableOutput("table_QLre")),
+    tabPanel("VA", dataTableOutput("table_QLva"))
+  )
+)
+
+server <- function(input, output) {
+  
+  # Filtrar variables según el año seleccionado
+  
+ vars_QLue.99 <- paste0("QLue.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_QLue.04 <- paste0("QLue.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_QLue.09 <- paste0("QLue.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_QLue.14 <- paste0("QLue.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_QLue.19 <- paste0("QLue.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+   
+ vars_QLaf.99 <- paste0("QLaf.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_QLaf.04 <- paste0("QLaf.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_QLaf.09 <- paste0("QLaf.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_QLaf.14 <- paste0("QLaf.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_QLaf.19 <- paste0("QLaf.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_QLfb.99 <- paste0("QLfb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_QLfb.04 <- paste0("QLfb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_QLfb.09 <- paste0("QLfb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_QLfb.14 <- paste0("QLfb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_QLfb.19 <- paste0("QLfb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+ 
+ vars_QLpb.99 <- paste0("QLpb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_QLpb.04 <- paste0("QLpb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_QLpb.09 <- paste0("QLpb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_QLpb.14 <- paste0("QLpb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_QLpb.19 <- paste0("QLpb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+ 
+ vars_QLpo.99 <- paste0("QLpo.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_QLpo.04 <- paste0("QLpo.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_QLpo.09 <- paste0("QLpo.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_QLpo.14 <- paste0("QLpo.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_QLpo.19 <- paste0("QLpo.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_QLre.99 <- paste0("QLre.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_QLre.04 <- paste0("QLre.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_QLre.09 <- paste0("QLre.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_QLre.14 <- paste0("QLre.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_QLre.19 <- paste0("QLre.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+ 
+ vars_QLva.99 <- paste0("QLva.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_QLva.04 <- paste0("QLva.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_QLva.09 <- paste0("QLva.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_QLva.14 <- paste0("QLva.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_QLva.19 <- paste0("QLva.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+  # Obtener los datos de la base según el año y variables seleccionadas
+  
+  filtered_data_QLue <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_QLue.99,
+                                                 "2004" = vars_QLue.04,
+                                                 "2009" = vars_QLue.09,
+                                                 "2014" = vars_QLue.14,
+                                                 "2019" = vars_QLue.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_QLaf <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_QLaf.99,
+                                                 "2004" = vars_QLaf.04,
+                                                 "2009" = vars_QLaf.09,
+                                                 "2014" = vars_QLaf.14,
+                                                 "2019" = vars_QLaf.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_QLfb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_QLfb.99,
+                                                 "2004" = vars_QLfb.04,
+                                                 "2009" = vars_QLfb.09,
+                                                 "2014" = vars_QLfb.14,
+                                                 "2019" = vars_QLfb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_QLpb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_QLpb.99,
+                                                 "2004" = vars_QLpb.04,
+                                                 "2009" = vars_QLpb.09,
+                                                 "2014" = vars_QLpb.14,
+                                                 "2019" = vars_QLpb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_QLpo <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_QLpo.99,
+                                                 "2004" = vars_QLpo.04,
+                                                 "2009" = vars_QLpo.09,
+                                                 "2014" = vars_QLpo.14,
+                                                 "2019" = vars_QLpo.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_QLre <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_QLre.99,
+                                                 "2004" = vars_QLre.04,
+                                                 "2009" = vars_QLre.09,
+                                                 "2014" = vars_QLre.14,
+                                                 "2019" = vars_QLre.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_QLva <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_QLva.99,
+                                                 "2004" = vars_QLva.04,
+                                                 "2009" = vars_QLva.09,
+                                                 "2014" = vars_QLva.14,
+                                                 "2019" = vars_QLva.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+# Cambiar nombres de columnas
+  
+output$table_QLue <- renderDataTable({
+  data <- filtered_data_QLue()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Unidades económicas",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+
+output$table_QLfb <- renderDataTable({
+  data <- filtered_data_QLfb()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Formación bruta de capital fijo",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_QLpb <- renderDataTable({
+  data <- filtered_data_QLpb()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Producción bruta total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+  
+output$table_QLpb <- renderDataTable({
+  data <- filtered_data_QLpb()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Producción bruta total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_QLpo <- renderDataTable({
+  data <- filtered_data_QLpo()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Personal ocupado total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_QLre <- renderDataTable({
+  data <- filtered_data_QLre()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Remueraciones totales",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
+ output$table_QLva <- renderDataTable({
+  data <- filtered_data_QLva()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Valor agregado censal bruto",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
 }
 
 # Ejecutar la aplicación
 shinyApp(ui = ui, server = server)
 ```
 
+#### *Coeficientes de Participación Relativa (PR)*
+
+```{r}
+
+# UI
+ui <- fluidPage(
+  
+  # Selección del año
+  selectInput("year", "Selecciona el año:",
+              choices = c("1999", "2004", "2009", "2014", "2019"),
+              selected = "1999"),
+  
+  # Tablas
+  tabsetPanel(
+    tabPanel("UE", dataTableOutput("table_PRue")),
+    tabPanel("AF", dataTableOutput("table_PRaf")),
+    tabPanel("FB", dataTableOutput("table_PRfb")),
+    tabPanel("PB", dataTableOutput("table_PRpb")),
+    tabPanel("PO", dataTableOutput("table_PRpo")),
+    tabPanel("RE", dataTableOutput("table_PRre")),
+    tabPanel("VA", dataTableOutput("table_PRva"))
+  )
+)
+
+server <- function(input, output) {
+  
+  # Filtrar variables según el año seleccionado
+  
+ vars_PRue.99 <- paste0("PRue.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_PRue.04 <- paste0("PRue.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_PRue.09 <- paste0("PRue.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_PRue.14 <- paste0("PRue.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_PRue.19 <- paste0("PRue.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+   
+ vars_PRaf.99 <- paste0("PRaf.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_PRaf.04 <- paste0("PRaf.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_PRaf.09 <- paste0("PRaf.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_PRaf.14 <- paste0("PRaf.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_PRaf.19 <- paste0("PRaf.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_PRfb.99 <- paste0("PRfb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_PRfb.04 <- paste0("PRfb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_PRfb.09 <- paste0("PRfb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_PRfb.14 <- paste0("PRfb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_PRfb.19 <- paste0("PRfb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_PRpb.99 <- paste0("PRpb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_PRpb.04 <- paste0("PRpb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_PRpb.09 <- paste0("PRpb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_PRpb.14 <- paste0("PRpb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_PRpb.19 <- paste0("PRpb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_PRpo.99 <- paste0("PRpo.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_PRpo.04 <- paste0("PRpo.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_PRpo.09 <- paste0("PRpo.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_PRpo.14 <- paste0("PRpo.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_PRpo.19 <- paste0("PRpo.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_PRre.99 <- paste0("PRre.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_PRre.04 <- paste0("PRre.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_PRre.09 <- paste0("PRre.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_PRre.14 <- paste0("PRre.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_PRre.19 <- paste0("PRre.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+ 
+ vars_PRva.99 <- paste0("PRva.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_PRva.04 <- paste0("PRva.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_PRva.09 <- paste0("PRva.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_PRva.14 <- paste0("PRva.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_PRva.19 <- paste0("PRva.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+  # Obtener los datos de la base según el año y variables seleccionadas
+  
+  filtered_data_PRue <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_PRue.99,
+                                                 "2004" = vars_PRue.04,
+                                                 "2009" = vars_PRue.09,
+                                                 "2014" = vars_PRue.14,
+                                                 "2019" = vars_PRue.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_PRaf <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_PRaf.99,
+                                                 "2004" = vars_PRaf.04,
+                                                 "2009" = vars_PRaf.09,
+                                                 "2014" = vars_PRaf.14,
+                                                 "2019" = vars_PRaf.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_PRfb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_PRfb.99,
+                                                 "2004" = vars_PRfb.04,
+                                                 "2009" = vars_PRfb.09,
+                                                 "2014" = vars_PRfb.14,
+                                                 "2019" = vars_PRfb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_PRpb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_PRpb.99,
+                                                 "2004" = vars_PRpb.04,
+                                                 "2009" = vars_PRpb.09,
+                                                 "2014" = vars_PRpb.14,
+                                                 "2019" = vars_PRpb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_PRpo <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_PRpo.99,
+                                                 "2004" = vars_PRpo.04,
+                                                 "2009" = vars_PRpo.09,
+                                                 "2014" = vars_PRpo.14,
+                                                 "2019" = vars_PRpo.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_PRre <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_PRre.99,
+                                                 "2004" = vars_PRre.04,
+                                                 "2009" = vars_PRre.09,
+                                                 "2014" = vars_PRre.14,
+                                                 "2019" = vars_PRre.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_PRva <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_PRva.99,
+                                                 "2004" = vars_PRva.04,
+                                                 "2009" = vars_PRva.09,
+                                                 "2014" = vars_PRva.14,
+                                                 "2019" = vars_PRva.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+# Cambiar nombres de columnas
+  
+output$table_PRue <- renderDataTable({
+  data <- filtered_data_PRue()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Unidades económicas",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+
+output$table_PRaf <- renderDataTable({
+  data <- filtered_data_PRaf()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Activiso fijos totales",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_PRfb <- renderDataTable({
+  data <- filtered_data_PRfb()
+  data[] <- lapply(data, function(x) format(round(as.numeric(x), 3), big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Formación bruta de capital fijo",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
+output$table_PRpb <- renderDataTable({
+  data <- filtered_data_PRpb()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Producción bruta total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_PRpo <- renderDataTable({
+  data <- filtered_data_PRpo()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Personal ocupado total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_PRre <- renderDataTable({
+  data <- filtered_data_PRre()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Remueraciones totales",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
+ output$table_PRva <- renderDataTable({
+  data <- filtered_data_PRva()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Valor agregado censal bruto",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
+}
+
+# Ejecutar la aplicación
+shinyApp(ui = ui, server = server)
+```
+
+
+#### *Coeficientes Hirschman-Herfindahl (HH)*
+
+```{r}
+
+# UI
+ui <- fluidPage(
+  
+  # Selección del año
+  selectInput("year", "Selecciona el año:",
+              choices = c("1999", "2004", "2009", "2014", "2019"),
+              selected = "1999"),
+  
+  # Tablas
+  tabsetPanel(
+    tabPanel("UE", dataTableOutput("table_HHue")),
+    tabPanel("AF", dataTableOutput("table_HHaf")),
+    tabPanel("FB", dataTableOutput("table_HHfb")),
+    tabPanel("PB", dataTableOutput("table_HHpb")),
+    tabPanel("PO", dataTableOutput("table_HHpo")),
+    tabPanel("RE", dataTableOutput("table_HHre")),
+    tabPanel("VA", dataTableOutput("table_HHva"))
+  )
+)
+
+server <- function(input, output) {
+  
+  # Filtrar variables según el año seleccionado
+  
+ vars_HHue.99 <- paste0("HHue.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_HHue.04 <- paste0("HHue.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_HHue.09 <- paste0("HHue.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_HHue.14 <- paste0("HHue.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_HHue.19 <- paste0("HHue.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+   
+ vars_HHaf.99 <- paste0("HHaf.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_HHaf.04 <- paste0("HHaf.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_HHaf.09 <- paste0("HHaf.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_HHaf.14 <- paste0("HHaf.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_HHaf.19 <- paste0("HHaf.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_HHfb.99 <- paste0("HHfb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_HHfb.04 <- paste0("HHfb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_HHfb.09 <- paste0("HHfb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_HHfb.14 <- paste0("HHfb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_HHfb.19 <- paste0("HHfb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_HHpb.99 <- paste0("HHpb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_HHpb.04 <- paste0("HHpb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_HHpb.09 <- paste0("HHpb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_HHpb.14 <- paste0("HHpb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_HHpb.19 <- paste0("HHpb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+ 
+ vars_HHpo.99 <- paste0("HHpo.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_HHpo.04 <- paste0("HHpo.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_HHpo.09 <- paste0("HHpo.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_HHpo.14 <- paste0("HHpo.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_HHpo.19 <- paste0("HHpo.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+ vars_HHre.99 <- paste0("HHre.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_HHre.04 <- paste0("HHre.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_HHre.09 <- paste0("HHre.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_HHre.14 <- paste0("HHre.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_HHre.19 <- paste0("HHre.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+ 
+ vars_HHva.99 <- paste0("HHva.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
+ vars_HHva.04 <- paste0("HHva.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
+ vars_HHva.09 <- paste0("HHva.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
+ vars_HHva.14 <- paste0("HHva.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
+ vars_HHva.19 <- paste0("HHva.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+
+  # Obtener los datos de la base según el año y variables seleccionadas
+  
+  filtered_data_HHue <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_HHue.99,
+                                                 "2004" = vars_HHue.04,
+                                                 "2009" = vars_HHue.09,
+                                                 "2014" = vars_HHue.14,
+                                                 "2019" = vars_HHue.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_HHaf <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_HHaf.99,
+                                                 "2004" = vars_HHaf.04,
+                                                 "2009" = vars_HHaf.09,
+                                                 "2014" = vars_HHaf.14,
+                                                 "2019" = vars_HHaf.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_HHfb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_HHfb.99,
+                                                 "2004" = vars_HHfb.04,
+                                                 "2009" = vars_HHfb.09,
+                                                 "2014" = vars_HHfb.14,
+                                                 "2019" = vars_HHfb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_HHpb <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_HHpb.99,
+                                                 "2004" = vars_HHpb.04,
+                                                 "2009" = vars_HHpb.09,
+                                                 "2014" = vars_HHpb.14,
+                                                 "2019" = vars_HHpb.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_HHpo <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_HHpo.99,
+                                                 "2004" = vars_HHpo.04,
+                                                 "2009" = vars_HHpo.09,
+                                                 "2014" = vars_HHpo.14,
+                                                 "2019" = vars_HHpo.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_HHre <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_HHre.99,
+                                                 "2004" = vars_HHre.04,
+                                                 "2009" = vars_HHre.09,
+                                                 "2014" = vars_HHre.14,
+                                                 "2019" = vars_HHre.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+  filtered_data_HHva <- reactive({
+    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
+                                                 "1999" = vars_HHva.99,
+                                                 "2004" = vars_HHva.04,
+                                                 "2009" = vars_HHva.09,
+                                                 "2014" = vars_HHva.14,
+                                                 "2019" = vars_HHva.19))
+    subset(Base_zona, select = select_cols)
+  })
+  
+# Cambiar nombres de columnas
+  
+output$table_HHue <- renderDataTable({
+  data <- filtered_data_HHue()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Unidades económicas",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+
+output$table_HHaf <- renderDataTable({
+  data <- filtered_data_HHaf()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Activiso fijos totales",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_HHfb <- renderDataTable({
+  data <- filtered_data_HHfb()
+  data[] <- lapply(data, function(x) format(round(as.numeric(x), 3), big.mark = ","))
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Formación bruta de capital fijo",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
+output$table_HHpb <- renderDataTable({
+  data <- filtered_data_HHpb()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Producción bruta total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_HHpo <- renderDataTable({
+  data <- filtered_data_HHpo()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Personal ocupado total",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+
+output$table_HHre <- renderDataTable({
+  data <- filtered_data_HHre()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Remueraciones totales",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
+ output$table_HHva <- renderDataTable({
+  data <- filtered_data_HHva()
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
+  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
+},
+caption = "Valor agregado censal bruto",
+options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+rownames = FALSE,
+width = "40%")
+  
+}
+
+# Ejecutar la aplicación
+shinyApp(ui = ui, server = server)
+```
