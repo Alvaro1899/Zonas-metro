@@ -13,7 +13,7 @@ params:
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 
 library(readxl)
-Base_unica <- read_excel("Bases de datos\\Base única.xlsx")
+Base_unica <- read_excel("C:\\Users\\leope\\Documents\\RepTemplates\\Zonas-metro\\Bases de datos\\Base única.xlsx")
 
 ```
 
@@ -911,7 +911,13 @@ width = "40%")
 
 output$table_PRfb <- renderDataTable({
   data <- filtered_data_PRfb()
-  data[] <- lapply(data, function(x) format(round(as.numeric(x), 3), big.mark = ","))
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
   setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
 },
 caption = "Formación bruta de capital fijo",
@@ -1169,7 +1175,13 @@ width = "40%")
 
 output$table_HHfb <- renderDataTable({
   data <- filtered_data_HHfb()
-  data[] <- lapply(data, function(x) format(round(as.numeric(x), 3), big.mark = ","))
+  data[] <- lapply(data, function(x) {
+    if(is.numeric(x)) {
+      format(round(as.numeric(x), 3), big.mark = ",")
+    } else {
+      x
+    }
+  })
   setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
 },
 caption = "Formación bruta de capital fijo",
