@@ -7,7 +7,7 @@ output:
   html_document:
     theme: cerulean
 params:
-  zona: "1.01"
+  zona: "9.01"
 ---
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
