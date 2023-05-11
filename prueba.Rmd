@@ -2,7 +2,7 @@
 title: "Ficha de Información Metropolitana"
 author: 
   - Martínez Rodriguez, Alvaro^["Universidad Autonóma Metropolitana, Unidad Azcapotzalco", martinez.alvaro61@gmail.com]
-  - Pérez Victorino, Leonardo^["Universidad Autonóma Metropolitana, Unidad Azcapotzalco", leo@gmail.com]
+  - Pérez Victorino, Leonardo^["Universidad Autonóma Metropolitana, Unidad Azcapotzalco", perezvictorinoleonardo@gmail.com]
 output:
   html_document:
     toc: TRUE
@@ -283,6 +283,34 @@ Por último, el IRS es construido por el Consejo Nacional de Evaluación de la P
 - El promedio del IM en 2020 para la zona metropolitana es de `r format(mean(Base_zona$IRS), scientific = FALSE, digits = 3)` según datos del CONAPO.
 
 ## Datos económicos. 
+
+Con base en la información de los subsectores de los 21 sectores principales de la clasificación del SCIAN, extraída de los Censos Económicos del INEGI durante el periodo de 1998-2018, se ha llevado a cabo la agrupación de los datos de cada municipio que pertenece a una zona metropolitana en cinco grandes sectores: Primarios, Construcción, Manufactura, Comercio y Servicios. Esta clasificación se basa en la metodología proporcionada por el INEGI.Se utilizaron las siguientes variables:
+
+* Unidades económicas (UE) [número de unidades]
+* Activiso fijos totales (AF) [miles de pesos a precios corrientes]
+* Formación bruta de capital fijo (FB) [miles de pesos a precios corrientes]
+* Producción bruta total (PB) [miles de pesos a precios corrientes]
+* Personal ocupado total (PO) [número de personas]
+* Total de remuneraciones (RE) [miles de pesos a precios corrientes]
+* Valor agregado censal bruto (VA) [miles de pesos a precios corrientes]
+
+Posteriormente, se replica la metodología utilizada por García y Carranco (2008) para estimar los coeficientes de participación relativa (PR), de localización de la actividad económica (QL), Hirschman-Herfindahl (HH) e Inverso de Hirschman-Herfindahl (IHH).
+
+
+$PR_ij$=$X_ij/X_in$
+
+$QL_ij$=$(X_ij⁄X_j )/(X_in⁄X_n)$ 
+
+$HH_ij$=$X_ij/X_in - X_j/X_n$
+
+$IHH_ij$=$1/HH$
+
+Donde:
+
+$X_ij$= Variable económica del sector i en el municipio j 
+$X_j$= Variable económica del total de los sectores en el municipio j  
+$X_in$= Variable económica del sector i de la Zona Metropolitana del municipio j
+$X_n$= Variable económica del total de los sectores Zona Metropolitana del municipio j
 
 ### Cifras brutas {.tabset}
 #### 1999 {.tabset}
