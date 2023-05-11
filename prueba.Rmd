@@ -1,24 +1,34 @@
 ---
 title: "Ficha de Información Metropolitana"
-author: "Martínez Rodriguez, Alvaro; Pérez Victorino, Leonardo"
-institution: "Universidad Autonóma Metropolitana Unidad Azcapotzalco"
-date: "4 de abril de 2023"
-output: 
+author: 
+  - Martínez Rodriguez, Alvaro^["Universidad Autonóma Metropolitana, Unidad Azcapotzalco", martinez.alvaro61@gmail.com]
+  - Pérez Victorino, Leonardo^["Universidad Autonóma Metropolitana, Unidad Azcapotzalco", leo@gmail.com]
+output:
   html_document:
-    theme: cerulean
+    toc: TRUE
+    toc_float: TRUE
+    toc_depth: 4
+    theme: journal
 params:
-  zona: "9.01"
+  zona: "1.01"
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 
 library(readxl)
-Base_unica <- read_excel("C:\\Users\\leope\\Documents\\RepTemplates\\Zonas-metro\\Bases de datos\\Base única.xlsx")
+Base_unica <- read_excel("Bases de datos\\Base única.xlsx")
+```
+
+```{r include=FALSE}
+if(!exists("Base_unica")) { # verifica si el objeto Base_unica ya existe en la sesión de R
+  library(googlesheets4)
+  url.dat <-("https://docs.google.com/spreadsheets/d/1X6PBH4l8P316flE8ty0IjbnHDEUKDLzW0fS4LYsYKXM/edit#gid=512447870")
+  Base_unica <- read_sheet(url.dat)
+} # si el objeto no existe, descarga y almacena la base en el objeto Base_unica
 
 ```
 
-
-```{r echo=FALSE, message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 # Obtener el nombre de todas las variables en la base de datos
 variables <- names(Base_unica)
 
@@ -29,20 +39,27 @@ variables_utilizar <- variables[variables != "ID_VIV"]
 Base_zona <- Base_unica[Base_unica$CVE_ZM == params$zona, variables_utilizar]
 
 ```
-<div style="text-align: justify"> <div/>\ 
 
-La ficha de información metropolitana es un recurso valioso para la planificación territorial en zonas metropolitanas. En ella se incluyen datos censales en diversos formatos, como gráficas, tablas y mapas provenientes principalmente de los censos económicos de los años 1999, 2004, 2009, 2014 y 2019. A su vez, también incluye información de los censos de población y vivienda del año 2020, ambos censos son publicados por el Instituto Nacional de Estadística y Geografía (INEGI).\ 
+<div style="text-align: justify">
 
-# Ficha básica de la Zona Metropolitana de ``r unique(Base_zona$NOM_ZM) ``
-Según INEGI, las zonas metropolitanas son aquellas áreas urbanas que se componen de una ciudad principal (núcleo urbano) y su zona conurbada. Estas áreas urbanas se caracterizan por tener una alta densidad de población y estar interconectadas por vías de transporte y comunicación.La zona metropolitana de ``r unique(Base_zona$NOM_ZM) ``, se localiza en ``r unique(Base_zona$nom_ent) ``. La zona se compone de un total de ``r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE]) `` municipios, los cuales son:
+<div/>
+
+La ficha de información metropolitana es una herramienta valiosa para la planificación territorial en zonas metropolitanas (ZM). Proporciona información censal en diferentes formatos, como gráficos, tablas y mapas, tanto de los Censos de Población y Vivienda, 2020 (CPV2020) como de los Censos Económicos de 1999, 2004, 2009, 2014 y 2019. Ambos publicados por el Instituto Nacional de Estadística y Geografía (INEGI).
+
+Este documento se compone de tres partes principales: Información general sobre la ZM, información sociodemográfica e información economica. La primera sección tiene como objetivo proporcionar información general sobre la zona metropolitana, de modo que muestra datos genereales como los municipios que la componen, superficie, población, etc.En la sección de datos sociodemográficos, se presenta información más detallada descrita en bloques como: Grupos poblacionales, Vivienda, Socioeconomicos, Educación, Salud e indicadores de desarrollo humano. El objetivo de esta sección es proporcionar información general sobre la zona metropolitana y su estructura poblacional. Para la tecera sección se presenta información de los CE de la siguiente forma:...
+
+## Información general de la Zona Metropolitana de `r unique(Base_zona$NOM_ZM)`
+
+Según INEGI, las zona metropolitana se define como un área urbana que consta de una ciudad principal y su zona conurbada. Las zonas metropolitanas se caracterizan por tener una alta densidad de población y estar interconectadas por vías de transporte y comunicación. La zona metropolitana de `r unique(Base_zona$NOM_ZM)`, se localiza en `r unique(Base_zona$nom_ent)`. y esta compuesta por `r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE])` municipios, que se muestran a continuación:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.cap= "Municipios de la zona metropolitana", fig.width=4, fig.height=4}
-
+library(scales)
 library(knitr)
 library(kableExtra)
 library(DT)
 library(data.table)
 library(scales)
+library(dplyr)
 Base_zona_subset <- subset(Base_zona, select = c(nom_mun, cvegeo))
 
 # Cambiar nombres de columnas
@@ -54,6 +71,8 @@ datatable(Base_zona_subset,
           width = "40%")
 
 ```
+
+Además, se presenta un mapa de la zona metropolitana:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.width=4, fig.height=4, fig.cap= "Mapa de la zona metropolitana"}
 #Mapa de la zona metropolitana
@@ -78,7 +97,7 @@ tmap_mode("view")
 #mapa 2
 tmap::tm_shape(municipios_zm) +
   tmap::tm_borders() +
-  tmap::tm_fill("nom_ent", alpha = 0.9, legend.show = FALSE) +
+  tmap::tm_fill("nom_ent", alpha = 0.3, legend.show = FALSE) +
   tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
 ```
 
@@ -92,19 +111,16 @@ area_km2 <- area / 1000000
 
 A continuación se presentan algunos datos generales sobre esta zona:
 
-- ZM:``r unique(Base_zona$NOM_ZM) ``
-- Número de municipios: ``r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE]) ``
-- Población total: ``r format(sum(Base_zona$POBTOT), big.mark=",") ``
-- Superficie de la ZM: ``r sum(round(area_km2, 2)) ``
-- Densidad poblacional: ``r round(sum(Base_zona$POBTOT)/sum(round(area_km2, 2)),digits= 3)`` Hab/Km^2.
-- Grado promedio de escolaridad: ``r sum(Base_zona$GRAPROES)/nrow(Base_zona)``
-- Población urbana:
-- Pobalción rural:
+-   Zona Metropolitana:`r unique(Base_zona$NOM_ZM)`
+-   Número de municipios: `r nrow(Base_zona[Base_zona$CVE_ZM == params$zona, "cv_mun", drop = FALSE])`
+-   Población total: `r format(sum(Base_zona$POBTOT), big.mark=",")`
+-   Superficie de la ZM: `r format(sum(round(area_km2, 2)), big.mark=",")`
+-   Densidad poblacional: `r format(round(sum(Base_zona$POBTOT)/sum(round(area_km2, 2)),digits= 3), big.mark=",")` Hab/Km\^2.
+-   Grado promedio de escolaridad: `r mean(Base_zona$GRAPROES)`
 
+## Información sociodemográfica
 
-### Estructura de la población.
-
-La Estructura de Población de la zona metropolitana de ``r unique(Base_zona$NOM_ZM) `` presenta la siguiente forma:
+La estructura de población de la zona metropolitana de `r unique(Base_zona$NOM_ZM)` se presenta en la una piramide poblacional ya que permite obtener una visión general de la distribución de la población por género y edad:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=5, fig.height=4}
 #Piramide poblacional
@@ -166,10 +182,7 @@ piramide
 
 ```
 
-:Fuente: Elaboración propia con datos de CPV (2020)
-
-
-La población esta distribuida de la siguiente forma: 
+En el siguiente mapa se observa como se distribuye la población sobre la región:
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, paged.print=FALSE, fig.width=4, fig.height=4, fig.cap= "Distribución poblacional"}
 # Seleccionar las variables de interés y unirlas con la cartografía por la clave cvegeo
@@ -187,19 +200,16 @@ if (nrow(municipios_unidos) < 5) {
 # Crear el mapa temático
 tmap::tm_shape(municipios_unidos) +
   tmap::tm_borders() +
-  tmap::tm_fill("POBTOT", alpha = 0.9, title = "Población", style ="equal", n = num_classes) +
+  tmap::tm_fill("POBTOT", alpha = 0.4, title = "Población", style ="equal", n = num_classes) +
   tmap::tm_basemap(providers$OpenStreetMap, alpha = 0.5)
 ```
 
-:Fuente: Elaboración propia con datos de CPV (2020)
+### Grupos de pobalción
 
-#### Grupos de pobalción
-
-- Población total respecto al país: ``r round(sum(Base_zona$POBTOT) / sum(Base_unica$POBTOT), digits = 3) %>% percent()``
-- Población Masculina:  ``r round(sum(Base_zona$POBMAS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Población Femenina: ``r round(sum(Base_zona$POBFEM) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Relación M-F: ``r round(sum(Base_zona$REL_H_M)/nrow(Base_zona),digits= 3) ``
-
+-   Población total respecto al país: `r round(sum(Base_zona$POBTOT) / sum(Base_unica$POBTOT), digits = 3) %>% percent()`. Este valor indica el peso poblacional de la zona metropolitana en relación con la población total de México.
+-   Población Masculina: `r round(sum(Base_zona$POBMAS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
+-   Población Femenina: `r round(sum(Base_zona$POBFEM) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
+-   Relación M-F: `r round(sum(Base_zona$REL_H_M)/nrow(Base_zona),digits= 3)`. Este valor indica la proporción de hombres por cada mujer en la zona metropolitana.
 
 ```{r eval=FALSE, fig.height=4, fig.width=4, message=FALSE, warning=FALSE, include=FALSE}
 
@@ -208,1053 +218,1820 @@ tmap::tm_shape(municipios_unidos) +
 Base_zona$cvegeo <- sprintf("%05d", Base_zona$cvegeo)
 ```
 
-#### Vivienda
+### Vivienda
 
-En el censo de Población y Vivienda del año 2020 los principales resultados para las viviendas son los siguientes:
+El CPV 2020 también proporciona información sobre la vivienda en la zona metropolitana, a continuación se presentan los principales resultados:
 
-- Número de viviendas habitadas: ``r format(sum(Base_zona$TVIVHAB), scientific = FALSE, digits = 3) ``
-- Porcentaje de viviendas desocupadas:``r round(sum(Base_zona$VIVPAR_DES) / sum(Base_zona$VIVTOT), digits = 3) %>% percent()``
-- Promedio de ocupantes por vivienda: ``r round (sum(Base_zona$PROM_OCUP)/nrow(Base_zona), digits = 3)``
-- Promedio de ocupantes por cuarto:``r sum(Base_zona$PRO_OCUP_C)/nrow(Base_zona)``
-- Porcentaje de viviendas con servicios básicos:``r round(sum(Base_zona$VPH_C_SERV) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()``
-- Porcentaje de viviendas sin bienes2: ``r round(sum(Base_zona$VPH_SNBIEN) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()``
-- Porcentaje de ocupantes en viviendas particulares que disponen de energía eléctrica, agua entubada y drenaje: ``r round(sum(Base_zona$VPH_SNBIEN) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()``
+-   Número de viviendas habitadas: `r format(sum(Base_zona$TVIVHAB), scientific = FALSE, digits = 3)`
+-   Porcentaje de viviendas desocupadas:`r round(sum(Base_zona$VIVPAR_DES) / sum(Base_zona$VIVTOT), digits = 3) %>% percent()`
+-   Promedio de ocupantes por vivienda: `r round (sum(Base_zona$PROM_OCUP)/nrow(Base_zona), digits = 3)`
+-   Promedio de ocupantes por cuarto:`r sum(Base_zona$PRO_OCUP_C)/nrow(Base_zona)`
+-   Porcentaje de viviendas con servicios básicos:`r round(sum(Base_zona$VPH_C_SERV) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()`
+-   Porcentaje de viviendas sin bienes2: `r round(sum(Base_zona$VPH_SNBIEN) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()`
+-   Porcentaje de ocupantes en viviendas particulares que disponen de energía eléctrica, agua entubada y drenaje: `r round(sum(Base_zona$VPH_SNBIEN) / sum(Base_zona$TVIVHAB), digits = 3) %>% percent()`
 
-#### Socioeconómicos
+### Socioeconómicos
 
-Los datos del Censo de Población y Vivienda 2020 presentan los siguientes datos para caracterizar la población desde el punto de vista de su actividad económica:
+La población en terminos de la poblacioón economicamente activa esta descrita por:
 
-- Porcentaje de población de 12 años y más económicamente activa: ``r round(sum(Base_zona$PEA) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Porcentaje de población de 12 años y más no económicamente activa: ``r round(sum(Base_zona$PE_INAC) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-` 
+-   Porcentaje de población de 12 años y más económicamente activa: `r round(sum(Base_zona$PEA) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
+-   Porcentaje de población de 12 años y más no económicamente activa: `r round(sum(Base_zona$PE_INAC) / sum(Base_zona$POBTOT), digits = 3) %>% percent()` \`
 
-#### Educación
+### Educación
 
-Según los datos del Censo de Población y Vivienda 2020, la educación de la zona metropolitana se caracteriza por los siguientes estadísticos:
+La educación de la zona metropolitana esta caracterizada por los siguientes estadísticos:
 
-- Porcentaje de población de 15 años y más sin escolaridad:``r round(sum(Base_zona$P15YM_SE) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Porcentaje de población de 15 años y más con al menos un grado aprobado en primaria: ``r round(1-(sum(Base_zona$PE_INAC) / sum(Base_zona$POBTOT)), digits = 3) %>% percent()``
-- Porcentaje de población de 15 años y más con educación básica completa: ``r round(sum(Base_zona$P15SEC_CO) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`` 
-- Porcentaje de población de 15 años y más con secundaria o equivalente incompleta:``r round(sum(Base_zona$P15SEC_IN) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`` 
-- Porcentaje de población de 18 años y más ocupada con al menos un grado aprobado en educación media superior: ``r round(sum(Base_zona$P18YM_PB) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
+-   Porcentaje de población de 15 años y más sin escolaridad:`r round(sum(Base_zona$P15YM_SE) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
+-   Porcentaje de población de 15 años y más con al menos un grado aprobado en primaria: `r round(1-(sum(Base_zona$PE_INAC) / sum(Base_zona$POBTOT)), digits = 3) %>% percent()`
+-   Porcentaje de población de 15 años y más con educación básica completa: `r round(sum(Base_zona$P15SEC_CO) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
+-   Porcentaje de población de 15 años y más con secundaria o equivalente incompleta:`r round(sum(Base_zona$P15SEC_IN) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
+-   Porcentaje de población de 18 años y más con al menos un grado aprobado en educación media superior: `r round(sum(Base_zona$P18YM_PB) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
 
-#### Salud
+### Salud
 
-En el Censo del año 2020, se manifiesta que la situación de la afiliación es la siguiente:
+La situación de la afiliación a algún servico de salud es la siguiente:
 
-- Porcentaje de población afiliada a servicios de salud: ``r round(sum(Base_zona$PDER_SS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()``
-- Población sin afiliación a servicios de salud:``r format(sum(Base_zona$PSINDER), scientific = FALSE, digits = 3)`` 
+-   Porcentaje de población afiliada a servicios de salud: `r round(sum(Base_zona$PDER_SS) / sum(Base_zona$POBTOT), digits = 3) %>% percent()`
+-   Población sin afiliación a servicios de salud:`r format(sum(Base_zona$PSINDER), scientific = FALSE, digits = 3)`
 
-### Datos económicos.
-#### *Variables económicas*
+### Indicadores de desarrollo
 
+Finalmente se presentan tres indicadores de desarrollo; los índices son: índice de Desarrollo Humano (IDH), Índice de Marginación (IM) e Índice de Rezago Social (IRS).
+
+IDH es un indicador elaborado por el Programa de Naciones Unidas para el Desarrollo (PNUD), este busca medir la calidad de vida, así como el progreso socioeconómico de cada entidad y municipio; El cálculo del Índice de Desarrollo Humano se realiza a partir de las tres variables: esperanza de vida, educación e ingreso per cápita.
+
+- Muy Alto - IDH mayor de 1.
+- Alto - IDH entre 0.80 a 1.
+- Medio	- IDH entre 0.50 y 0.80.
+- Bajo - IDH entre 0 y 0.50
+- Muy Bajo	- IDH menores a 0.
+
+-  El promedio del IDH en 2020 para la zona metropolitana es de `r format(mean(Base_zona$IDH), scientific = FALSE, digits = 3)` según datos del PNUD. 
+
+El IM es un índice construido por el consejo Nacional de Población (CONAPO). Este índice considera 4 dimensiones estructurales para su construcción: vivienda, ingreso, educación y distribución de la población. El indice se puede hubicar en 5 estratos designados por la ténica de estratificación de Dalenius-Hodges..
+
+- Muy bajo 	(-1.52944, -1.15143)
+- Bajo	(-1.15143, -0.39539)
+- Medio	(-0.39539, -0.01738)
+- Alto 	(-0.01738,  0.73866) 
+- Muy alto 	(0.738660,  2.25073)
+
+- El promedio del IM en 2020 para la zona metropolitana es de `r format(mean(Base_zona$IM_2020), scientific = FALSE, digits = 3)` según datos del CONAPO.
+
+Por último, el IRS es construido por el Consejo Nacional de Evaluación de la Política de Desarrollo Social, CONEVAL, este índice incorpora indicadores de educación, de acceso a servicios de salud, de servicios básicos y tiene como finalidad ordenar los municipios según sus carencias sociales. Este índice, al igual que el IM, se clasifica en cinco estratos.
+
+- El promedio del IM en 2020 para la zona metropolitana es de `r format(mean(Base_zona$IRS), scientific = FALSE, digits = 3)` según datos del CONAPO.
+
+## Datos económicos. 
+
+### Cifras brutas {.tabset}
+#### 1999 {.tabset}
+##### UE
 ```{r}
-library(shiny)
-library(DT)
-library(data.table)
-
-# UI
-ui <- fluidPage(
-  
-  # Selección del año
-  selectInput("year", "Selecciona el año:",
-              choices = c("1999", "2004", "2009", "2014", "2019"),
-              selected = "1999"),
-  
-  # Tablas
-  tabsetPanel(
-    tabPanel("UE", dataTableOutput("table_ue")),
-    tabPanel("AF", dataTableOutput("table_af")),
-    tabPanel("FB", dataTableOutput("table_fb")),
-    tabPanel("PB", dataTableOutput("table_pb")),
-    tabPanel("PO", dataTableOutput("table_po")),
-    tabPanel("RE", dataTableOutput("table_re")),
-    tabPanel("VA", dataTableOutput("table_va"))
-  )
-)
-
-server <- function(input, output) {
-  
-  # Filtrar variables según el año seleccionado
-  
-  vars_ue.99 <- c("ue.pri_99", "ue.con_99", "ue.man_99", "ue.com_99", "ue.ser_99")
-  vars_ue.04 <- c("ue.pri_04", "ue.con_04", "ue.man_04", "ue.com_04", "ue.ser_04")
-  vars_ue.09 <- c("ue.pri_09", "ue.con_09", "ue.man_09", "ue.com_09", "ue.ser_09")
-  vars_ue.14 <- c("ue.pri_14", "ue.con_14", "ue.man_14", "ue.com_14", "ue.ser_14")
-  vars_ue.19 <- c("ue.pri_19", "ue.con_19", "ue.man_19", "ue.com_19", "ue.ser_19")
-   
-  vars_af.99 <- c("af.pri_99", "af.con_99", "af.man_99", "af.com_99", "af.ser_99")
-  vars_af.04 <- c("af.pri_04", "af.con_04", "af.man_04", "af.com_04", "af.ser_04")
-  vars_af.09 <- c("af.pri_09", "af.con_09", "af.man_09", "af.com_09", "af.ser_09")
-  vars_af.14 <- c("af.pri_14", "af.con_14", "af.man_14", "af.com_14", "af.ser_14")
-  vars_af.19 <- c("af.pri_19", "af.con_19", "af.man_19", "af.com_19", "af.ser_19")
-
-  vars_fb.99 <- c("fb.pri_99", "fb.con_99", "fb.man_99", "fb.com_99", "fb.ser_99")
-  vars_fb.04 <- c("fb.pri_04", "fb.con_04", "fb.man_04", "fb.com_04", "fb.ser_04")
-  vars_fb.09 <- c("fb.pri_09", "fb.con_09", "fb.man_09", "fb.com_09", "fb.ser_09")
-  vars_fb.14 <- c("fb.pri_14", "fb.con_14", "fb.man_14", "fb.com_14", "fb.ser_14")
-  vars_fb.19 <- c("fb.pri_19", "fb.con_19", "fb.man_19", "fb.com_19", "fb.ser_19")
-
-  vars_pb.99 <- c("pb.pri_99", "pb.con_99", "pb.man_99", "pb.com_99", "pb.ser_99")
-  vars_pb.04 <- c("pb.pri_04", "pb.con_04", "pb.man_04", "pb.com_04", "pb.ser_04")
-  vars_pb.09 <- c("pb.pri_09", "pb.con_09", "pb.man_09", "pb.com_09", "pb.ser_09")
-  vars_pb.14 <- c("pb.pri_14", "pb.con_14", "pb.man_14", "pb.com_14", "pb.ser_14")
-  vars_pb.19 <- c("pb.pri_19", "pb.con_19", "pb.man_19", "pb.com_19", "pb.ser_19")
-  
-  vars_po.99 <- c("po.pri_99", "po.con_99", "po.man_99", "po.com_99", "po.ser_99")
-  vars_po.04 <- c("po.pri_04", "po.con_04", "po.man_04", "po.com_04", "po.ser_04")
-  vars_po.09 <- c("po.pri_09", "po.con_09", "po.man_09", "po.com_09", "po.ser_09")
-  vars_po.14 <- c("po.pri_14", "po.con_14", "po.man_14", "po.com_14", "po.ser_14")
-  vars_po.19 <- c("po.pri_19", "po.con_19", "po.man_19", "po.com_19", "po.ser_19")
-
-  vars_re.99 <- c("re.pri_99", "re.con_99", "re.man_99", "re.com_99", "re.ser_99")
-  vars_re.04 <- c("re.pri_04", "re.con_04", "re.man_04", "re.com_04", "re.ser_04")
-  vars_re.09 <- c("re.pri_09", "re.con_09", "re.man_09", "re.com_09", "re.ser_09")
-  vars_re.14 <- c("re.pri_14", "re.con_14", "re.man_14", "re.com_14", "re.ser_14")
-  vars_re.19 <- c("re.pri_19", "re.con_19", "re.man_19", "re.com_19", "re.ser_19")
-
-  vars_va.99 <- c("va.pri_99", "va.con_99", "va.man_99", "va.com_99", "va.ser_99")
-  vars_va.04 <- c("va.pri_04", "va.con_04", "va.man_04", "va.com_04", "va.ser_04")
-  vars_va.09 <- c("va.pri_09", "va.con_09", "va.man_09", "va.com_09", "va.ser_09")
-  vars_va.14 <- c("va.pri_14", "va.con_14", "va.man_14", "va.com_14", "va.ser_14")
-  vars_va.19 <- c("va.pri_19", "va.con_19", "va.man_19", "va.com_19", "va.ser_19")
-
-  # Obtener los datos de la base según el año y variables seleccionadas
-  
-  filtered_data_ue <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_ue.99,
-                                                 "2004" = vars_ue.04,
-                                                 "2009" = vars_ue.09,
-                                                 "2014" = vars_ue.14,
-                                                 "2019" = vars_ue.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_af <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_af.99,
-                                                 "2004" = vars_af.04,
-                                                 "2009" = vars_af.09,
-                                                 "2014" = vars_af.14,
-                                                 "2019" = vars_af.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_fb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_fb.99,
-                                                 "2004" = vars_fb.04,
-                                                 "2009" = vars_fb.09,
-                                                 "2014" = vars_fb.14,
-                                                 "2019" = vars_fb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_pb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_pb.99,
-                                                 "2004" = vars_pb.04,
-                                                 "2009" = vars_pb.09,
-                                                 "2014" = vars_pb.14,
-                                                 "2019" = vars_pb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_po <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_po.99,
-                                                 "2004" = vars_po.04,
-                                                 "2009" = vars_po.09,
-                                                 "2014" = vars_po.14,
-                                                 "2019" = vars_po.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_re <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_re.99,
-                                                 "2004" = vars_re.04,
-                                                 "2009" = vars_re.09,
-                                                 "2014" = vars_re.14,
-                                                 "2019" = vars_re.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_va <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_va.99,
-                                                 "2004" = vars_va.04,
-                                                 "2009" = vars_va.09,
-                                                 "2014" = vars_va.14,
-                                                 "2019" = vars_va.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-# Cambiar nombres de columnas
-  
-output$table_ue <- renderDataTable({
-  data <- filtered_data_ue()
-  data[] <- lapply(data, function(x) format(x, big.mark = ","))
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Unidades económicas",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_af <- renderDataTable({
-  data <- filtered_data_af()
-  data[] <- lapply(data, function(x) format(x, big.mark = ","))
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Activiso fijos totales (miles de pesos)",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_fb <- renderDataTable({
-  data <- filtered_data_fb()
-  data[] <- lapply(data, function(x) format(x, big.mark = ","))
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Formación bruta de capital fijo (miles de pesos)",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-output$table_pb <- renderDataTable({
-  data <- filtered_data_pb()
-  data[] <- lapply(data, function(x) format(x, big.mark = ","))
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Producción bruta total (miles de pesos)",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_po <- renderDataTable({
-  data <- filtered_data_po()
-  data[] <- lapply(data, function(x) format(x, big.mark = ","))
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Personal ocupado total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_re <- renderDataTable({
-  data <- filtered_data_re()
-  data[] <- lapply(data, function(x) format(x, big.mark = ","))
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Remueraciones totales (miles de pesos)",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-  output$table_va <- renderDataTable({
-  data <- filtered_data_va()
-  data[] <- lapply(data, function(x) format(x, big.mark = ","))
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Valor agregado censal bruto (miles de pesos)",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-}
-
-# Ejecutar la aplicación
-shinyApp(ui = ui, server = server)
+library(tidyverse)
+Cb991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_99", Construcción = "ue.con_99", Manufactura = "ue.man_99", Comercio = "ue.com_99", Servicios = "ue.ser_99")
+datatable(Cb991, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
 ```
-#### *Coeficientes de Localización Económica (QL)*
-
+##### AF
 ```{r}
-
-# UI
-ui <- fluidPage(
-  
-  # Selección del año
-  selectInput("year", "Selecciona el año:",
-              choices = c("1999", "2004", "2009", "2014", "2019"),
-              selected = "1999"),
-  
-  # Tablas
-  tabsetPanel(
-    tabPanel("UE", dataTableOutput("table_QLue")),
-    tabPanel("AF", dataTableOutput("table_QLaf")),
-    tabPanel("FB", dataTableOutput("table_QLfb")),
-    tabPanel("PB", dataTableOutput("table_QLpb")),
-    tabPanel("PO", dataTableOutput("table_QLpo")),
-    tabPanel("RE", dataTableOutput("table_QLre")),
-    tabPanel("VA", dataTableOutput("table_QLva"))
-  )
-)
-
-server <- function(input, output) {
-  
-  # Filtrar variables según el año seleccionado
-  
- vars_QLue.99 <- paste0("QLue.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_QLue.04 <- paste0("QLue.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_QLue.09 <- paste0("QLue.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_QLue.14 <- paste0("QLue.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_QLue.19 <- paste0("QLue.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-   
- vars_QLaf.99 <- paste0("QLaf.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_QLaf.04 <- paste0("QLaf.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_QLaf.09 <- paste0("QLaf.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_QLaf.14 <- paste0("QLaf.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_QLaf.19 <- paste0("QLaf.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_QLfb.99 <- paste0("QLfb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_QLfb.04 <- paste0("QLfb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_QLfb.09 <- paste0("QLfb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_QLfb.14 <- paste0("QLfb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_QLfb.19 <- paste0("QLfb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
- 
- vars_QLpb.99 <- paste0("QLpb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_QLpb.04 <- paste0("QLpb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_QLpb.09 <- paste0("QLpb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_QLpb.14 <- paste0("QLpb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_QLpb.19 <- paste0("QLpb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
- 
- vars_QLpo.99 <- paste0("QLpo.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_QLpo.04 <- paste0("QLpo.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_QLpo.09 <- paste0("QLpo.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_QLpo.14 <- paste0("QLpo.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_QLpo.19 <- paste0("QLpo.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_QLre.99 <- paste0("QLre.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_QLre.04 <- paste0("QLre.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_QLre.09 <- paste0("QLre.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_QLre.14 <- paste0("QLre.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_QLre.19 <- paste0("QLre.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
- 
- vars_QLva.99 <- paste0("QLva.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_QLva.04 <- paste0("QLva.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_QLva.09 <- paste0("QLva.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_QLva.14 <- paste0("QLva.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_QLva.19 <- paste0("QLva.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
-  # Obtener los datos de la base según el año y variables seleccionadas
-  
-  filtered_data_QLue <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_QLue.99,
-                                                 "2004" = vars_QLue.04,
-                                                 "2009" = vars_QLue.09,
-                                                 "2014" = vars_QLue.14,
-                                                 "2019" = vars_QLue.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_QLaf <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_QLaf.99,
-                                                 "2004" = vars_QLaf.04,
-                                                 "2009" = vars_QLaf.09,
-                                                 "2014" = vars_QLaf.14,
-                                                 "2019" = vars_QLaf.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_QLfb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_QLfb.99,
-                                                 "2004" = vars_QLfb.04,
-                                                 "2009" = vars_QLfb.09,
-                                                 "2014" = vars_QLfb.14,
-                                                 "2019" = vars_QLfb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_QLpb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_QLpb.99,
-                                                 "2004" = vars_QLpb.04,
-                                                 "2009" = vars_QLpb.09,
-                                                 "2014" = vars_QLpb.14,
-                                                 "2019" = vars_QLpb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_QLpo <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_QLpo.99,
-                                                 "2004" = vars_QLpo.04,
-                                                 "2009" = vars_QLpo.09,
-                                                 "2014" = vars_QLpo.14,
-                                                 "2019" = vars_QLpo.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_QLre <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_QLre.99,
-                                                 "2004" = vars_QLre.04,
-                                                 "2009" = vars_QLre.09,
-                                                 "2014" = vars_QLre.14,
-                                                 "2019" = vars_QLre.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_QLva <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_QLva.99,
-                                                 "2004" = vars_QLva.04,
-                                                 "2009" = vars_QLva.09,
-                                                 "2014" = vars_QLva.14,
-                                                 "2019" = vars_QLva.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-# Cambiar nombres de columnas
-  
-output$table_QLue <- renderDataTable({
-  data <- filtered_data_QLue()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Unidades económicas",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-
-output$table_QLfb <- renderDataTable({
-  data <- filtered_data_QLfb()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Formación bruta de capital fijo",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_QLpb <- renderDataTable({
-  data <- filtered_data_QLpb()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Producción bruta total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-  
-output$table_QLpb <- renderDataTable({
-  data <- filtered_data_QLpb()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Producción bruta total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_QLpo <- renderDataTable({
-  data <- filtered_data_QLpo()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Personal ocupado total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_QLre <- renderDataTable({
-  data <- filtered_data_QLre()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Remueraciones totales",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
- output$table_QLva <- renderDataTable({
-  data <- filtered_data_QLva()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Valor agregado censal bruto",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-}
-
-# Ejecutar la aplicación
-shinyApp(ui = ui, server = server)
+library(tidyverse)
+Cb992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_99", Construcción = "af.con_99", Manufactura = "af.man_99", Comercio = "af.com_99", Servicios = "af.ser_99")
+datatable(Cb992, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+Cb993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_99", Construcción = "fb.con_99", Manufactura = "fb.man_99", Comercio = "fb.com_99", Servicios = "fb.ser_99")
+datatable(Cb993, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+Cb994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_99", Construcción = "pb.con_99", Manufactura = "pb.man_99", Comercio = "pb.com_99", Servicios = "pb.ser_99")
+datatable(Cb994, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+Cb995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_99", Construcción = "po.con_99", Manufactura = "po.man_99", Comercio = "po.com_99", Servicios = "po.ser_99")
+datatable(Cb995, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+Cb996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_99", Construcción = "re.con_99", Manufactura = "re.man_99", Comercio = "re.com_99", Servicios = "re.ser_99")
+datatable(Cb996, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+Cb997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_99", Construcción = "va.con_99", Manufactura = "va.man_99", Comercio = "va.com_99", Servicios = "va.ser_99")
+datatable(Cb997, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
 ```
 
-#### *Coeficientes de Participación Relativa (PR)*
+#### 2004{.tabset}
 
+##### UE
 ```{r}
+library(tidyverse)
+Cb041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_04", Construcción = "ue.con_04", Manufactura = "ue.man_04", Comercio = "ue.com_04", Servicios = "ue.ser_04")
+datatable(Cb041, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+Cb042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_04", Construcción = "af.con_04", Manufactura = "af.man_04", Comercio = "af.com_04", Servicios = "af.ser_04")
+datatable(Cb042, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+Cb043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_04", Construcción = "fb.con_04", Manufactura = "fb.man_04", Comercio = "fb.com_04", Servicios = "fb.ser_04")
+datatable(Cb043, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+Cb044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_04", Construcción = "pb.con_04", Manufactura = "pb.man_04", Comercio = "pb.com_04", Servicios = "pb.ser_04")
+datatable(Cb044, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+Cb045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_04", Construcción = "po.con_04", Manufactura = "po.man_04", Comercio = "po.com_04", Servicios = "po.ser_04")
+datatable(Cb045, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+Cb046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_04", Construcción = "re.con_04", Manufactura = "re.man_04", Comercio = "re.com_04", Servicios = "re.ser_04")
+datatable(Cb046, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+Cb047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_04", Construcción = "va.con_04", Manufactura = "va.man_04", Comercio = "va.com_04", Servicios = "va.ser_04")
+datatable(Cb047, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+#### 2009{.tabset}
 
-# UI
-ui <- fluidPage(
-  
-  # Selección del año
-  selectInput("year", "Selecciona el año:",
-              choices = c("1999", "2004", "2009", "2014", "2019"),
-              selected = "1999"),
-  
-  # Tablas
-  tabsetPanel(
-    tabPanel("UE", dataTableOutput("table_PRue")),
-    tabPanel("AF", dataTableOutput("table_PRaf")),
-    tabPanel("FB", dataTableOutput("table_PRfb")),
-    tabPanel("PB", dataTableOutput("table_PRpb")),
-    tabPanel("PO", dataTableOutput("table_PRpo")),
-    tabPanel("RE", dataTableOutput("table_PRre")),
-    tabPanel("VA", dataTableOutput("table_PRva"))
-  )
-)
+##### UE
+```{r}
+library(tidyverse)
+Cb091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_09", Construcción = "ue.con_09", Manufactura = "ue.man_09", Comercio = "ue.com_09", Servicios = "ue.ser_09")
+datatable(Cb091, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+Cb092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_09", Construcción = "af.con_09", Manufactura = "af.man_09", Comercio = "af.com_09", Servicios = "af.ser_09")
+datatable(Cb092, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+Cb093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_09", Construcción = "fb.con_09", Manufactura = "fb.man_09", Comercio = "fb.com_09", Servicios = "fb.ser_09")
+datatable(Cb093, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+Cb094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_09", Construcción = "pb.con_09", Manufactura = "pb.man_09", Comercio = "pb.com_09", Servicios = "pb.ser_09")
+datatable(Cb094, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+Cb095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_09", Construcción = "po.con_09", Manufactura = "po.man_09", Comercio = "po.com_09", Servicios = "po.ser_09")
+datatable(Cb095, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+Cb096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_09", Construcción = "re.con_09", Manufactura = "re.man_09", Comercio = "re.com_09", Servicios = "re.ser_09")
+datatable(Cb096, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+Cb097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_09", Construcción = "va.con_09", Manufactura = "va.man_09", Comercio = "va.com_09", Servicios = "va.ser_09")
+datatable(Cb097, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+#### 2014{.tabset}
 
-server <- function(input, output) {
-  
-  # Filtrar variables según el año seleccionado
-  
- vars_PRue.99 <- paste0("PRue.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_PRue.04 <- paste0("PRue.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_PRue.09 <- paste0("PRue.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_PRue.14 <- paste0("PRue.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_PRue.19 <- paste0("PRue.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-   
- vars_PRaf.99 <- paste0("PRaf.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_PRaf.04 <- paste0("PRaf.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_PRaf.09 <- paste0("PRaf.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_PRaf.14 <- paste0("PRaf.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_PRaf.19 <- paste0("PRaf.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
+##### UE
+```{r}
+library(tidyverse)
+Cb141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_14", Construcción = "ue.con_14", Manufactura = "ue.man_14", Comercio = "ue.com_14", Servicios = "ue.ser_14")
+datatable(Cb141, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+Cb142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_14", Construcción = "af.con_14", Manufactura = "af.man_14", Comercio = "af.com_14", Servicios = "af.ser_14")
+datatable(Cb142, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+Cb143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_14", Construcción = "fb.con_14", Manufactura = "fb.man_14", Comercio = "fb.com_14", Servicios = "fb.ser_14")
+datatable(Cb143, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+Cb144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_14", Construcción = "pb.con_14", Manufactura = "pb.man_14", Comercio = "pb.com_14", Servicios = "pb.ser_14")
+datatable(Cb144, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+Cb145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_14", Construcción = "po.con_14", Manufactura = "po.man_14", Comercio = "po.com_14", Servicios = "po.ser_14")
+datatable(Cb145, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+Cb146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_14", Construcción = "re.con_14", Manufactura = "re.man_14", Comercio = "re.com_14", Servicios = "re.ser_14")
+datatable(Cb146, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+Cb147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_14", Construcción = "va.con_14", Manufactura = "va.man_14", Comercio = "va.com_14", Servicios = "va.ser_14")
+datatable(Cb147, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+#### 2019{.tabset}
 
- vars_PRfb.99 <- paste0("PRfb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_PRfb.04 <- paste0("PRfb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_PRfb.09 <- paste0("PRfb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_PRfb.14 <- paste0("PRfb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_PRfb.19 <- paste0("PRfb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_PRpb.99 <- paste0("PRpb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_PRpb.04 <- paste0("PRpb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_PRpb.09 <- paste0("PRpb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_PRpb.14 <- paste0("PRpb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_PRpb.19 <- paste0("PRpb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_PRpo.99 <- paste0("PRpo.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_PRpo.04 <- paste0("PRpo.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_PRpo.09 <- paste0("PRpo.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_PRpo.14 <- paste0("PRpo.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_PRpo.19 <- paste0("PRpo.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_PRre.99 <- paste0("PRre.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_PRre.04 <- paste0("PRre.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_PRre.09 <- paste0("PRre.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_PRre.14 <- paste0("PRre.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_PRre.19 <- paste0("PRre.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
- 
- vars_PRva.99 <- paste0("PRva.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_PRva.04 <- paste0("PRva.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_PRva.09 <- paste0("PRva.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_PRva.14 <- paste0("PRva.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_PRva.19 <- paste0("PRva.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
-  # Obtener los datos de la base según el año y variables seleccionadas
-  
-  filtered_data_PRue <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_PRue.99,
-                                                 "2004" = vars_PRue.04,
-                                                 "2009" = vars_PRue.09,
-                                                 "2014" = vars_PRue.14,
-                                                 "2019" = vars_PRue.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_PRaf <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_PRaf.99,
-                                                 "2004" = vars_PRaf.04,
-                                                 "2009" = vars_PRaf.09,
-                                                 "2014" = vars_PRaf.14,
-                                                 "2019" = vars_PRaf.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_PRfb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_PRfb.99,
-                                                 "2004" = vars_PRfb.04,
-                                                 "2009" = vars_PRfb.09,
-                                                 "2014" = vars_PRfb.14,
-                                                 "2019" = vars_PRfb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_PRpb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_PRpb.99,
-                                                 "2004" = vars_PRpb.04,
-                                                 "2009" = vars_PRpb.09,
-                                                 "2014" = vars_PRpb.14,
-                                                 "2019" = vars_PRpb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_PRpo <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_PRpo.99,
-                                                 "2004" = vars_PRpo.04,
-                                                 "2009" = vars_PRpo.09,
-                                                 "2014" = vars_PRpo.14,
-                                                 "2019" = vars_PRpo.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_PRre <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_PRre.99,
-                                                 "2004" = vars_PRre.04,
-                                                 "2009" = vars_PRre.09,
-                                                 "2014" = vars_PRre.14,
-                                                 "2019" = vars_PRre.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_PRva <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_PRva.99,
-                                                 "2004" = vars_PRva.04,
-                                                 "2009" = vars_PRva.09,
-                                                 "2014" = vars_PRva.14,
-                                                 "2019" = vars_PRva.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-# Cambiar nombres de columnas
-  
-output$table_PRue <- renderDataTable({
-  data <- filtered_data_PRue()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Unidades económicas",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-
-output$table_PRaf <- renderDataTable({
-  data <- filtered_data_PRaf()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Activiso fijos totales",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_PRfb <- renderDataTable({
-  data <- filtered_data_PRfb()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Formación bruta de capital fijo",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-output$table_PRpb <- renderDataTable({
-  data <- filtered_data_PRpb()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Producción bruta total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_PRpo <- renderDataTable({
-  data <- filtered_data_PRpo()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Personal ocupado total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_PRre <- renderDataTable({
-  data <- filtered_data_PRre()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Remueraciones totales",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
- output$table_PRva <- renderDataTable({
-  data <- filtered_data_PRva()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Valor agregado censal bruto",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-}
-
-# Ejecutar la aplicación
-shinyApp(ui = ui, server = server)
+##### UE
+```{r}
+library(tidyverse)
+Cb191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_19", Construcción = "ue.con_19", Manufactura = "ue.man_19", Comercio = "ue.com_19", Servicios = "ue.ser_19")
+datatable(Cb191, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+Cb192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_19", Construcción = "af.con_19", Manufactura = "af.man_19", Comercio = "af.com_19", Servicios = "af.ser_19")
+datatable(Cb192, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+Cb193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_19", Construcción = "fb.con_19", Manufactura = "fb.man_19", Comercio = "fb.com_19", Servicios = "fb.ser_19")
+datatable(Cb193, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+Cb194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_19", Construcción = "pb.con_19", Manufactura = "pb.man_19", Comercio = "pb.com_19", Servicios = "pb.ser_19")
+datatable(Cb194, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+Cb195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_19", Construcción = "po.con_19", Manufactura = "po.man_19", Comercio = "po.com_19", Servicios = "po.ser_19")
+datatable(Cb195, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+Cb196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_19", Construcción = "re.con_19", Manufactura = "re.man_19", Comercio = "re.com_19", Servicios = "re.ser_19")
+datatable(Cb196, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+Cb197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_19", Construcción = "va.con_19", Manufactura = "va.man_19", Comercio = "va.com_19", Servicios = "va.ser_19")
+datatable(Cb197, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+### {-}
+### Coeficientes de localización (QL) {.tabset}
+#### 1999 {.tabset}
+##### UE
+```{r}
+library(tidyverse)
+QL991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_99", Construcción = "QLue.con_99", Manufactura = "QLue.man_99", Comercio = "QLue.com_99", Servicios = "QLue.ser_99")
+# Aplicar formato a las columnas numéricas
+QL991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL991, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+QL992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_99", Construcción = "QLaf.con_99", Manufactura = "QLaf.man_99", Comercio = "QLaf.com_99", Servicios = "QLaf.ser_99")
+# Aplicar formato a las columnas numéricas
+QL992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL992, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+QL993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_99", Construcción = "QLue.con_99", Manufactura = "QLue.man_99", Comercio = "QLue.com_99", Servicios = "QLue.ser_99")
+# Aplicar formato a las columnas numéricas
+QL993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL993, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+QL994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_99", Construcción = "QLpb.con_99", Manufactura = "QLpb.man_99", Comercio = "QLpb.com_99", Servicios = "QLpb.ser_99")
+# Aplicar formato a las columnas numéricas
+QL994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL994, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+QL995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_99", Construcción = "QLpo.con_99", Manufactura = "QLpo.man_99", Comercio = "QLpo.com_99", Servicios = "QLpo.ser_99")
+# Aplicar formato a las columnas numéricas
+QL995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL995, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+QL996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_99", Construcción = "QLre.con_99", Manufactura = "QLre.man_99", Comercio = "QLre.com_99", Servicios = "QLre.ser_99")
+# Aplicar formato a las columnas numéricas
+QL996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL996, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+QL997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_99", Construcción = "QLva.con_99", Manufactura = "QLva.man_99", Comercio = "QLva.com_99", Servicios = "QLva.ser_99")
+# Aplicar formato a las columnas numéricas
+QL997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL997, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
 ```
 
+#### 2004{.tabset}
 
-#### *Coeficientes Hirschman-Herfindahl (HH)*
-
+##### UE
 ```{r}
-
-# UI
-ui <- fluidPage(
-  
-  # Selección del año
-  selectInput("year", "Selecciona el año:",
-              choices = c("1999", "2004", "2009", "2014", "2019"),
-              selected = "1999"),
-  
-  # Tablas
-  tabsetPanel(
-    tabPanel("UE", dataTableOutput("table_HHue")),
-    tabPanel("AF", dataTableOutput("table_HHaf")),
-    tabPanel("FB", dataTableOutput("table_HHfb")),
-    tabPanel("PB", dataTableOutput("table_HHpb")),
-    tabPanel("PO", dataTableOutput("table_HHpo")),
-    tabPanel("RE", dataTableOutput("table_HHre")),
-    tabPanel("VA", dataTableOutput("table_HHva"))
-  )
-)
-
-server <- function(input, output) {
-  
-  # Filtrar variables según el año seleccionado
-  
- vars_HHue.99 <- paste0("HHue.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_HHue.04 <- paste0("HHue.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_HHue.09 <- paste0("HHue.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_HHue.14 <- paste0("HHue.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_HHue.19 <- paste0("HHue.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-   
- vars_HHaf.99 <- paste0("HHaf.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_HHaf.04 <- paste0("HHaf.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_HHaf.09 <- paste0("HHaf.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_HHaf.14 <- paste0("HHaf.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_HHaf.19 <- paste0("HHaf.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_HHfb.99 <- paste0("HHfb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_HHfb.04 <- paste0("HHfb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_HHfb.09 <- paste0("HHfb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_HHfb.14 <- paste0("HHfb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_HHfb.19 <- paste0("HHfb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_HHpb.99 <- paste0("HHpb.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_HHpb.04 <- paste0("HHpb.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_HHpb.09 <- paste0("HHpb.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_HHpb.14 <- paste0("HHpb.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_HHpb.19 <- paste0("HHpb.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
- 
- vars_HHpo.99 <- paste0("HHpo.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_HHpo.04 <- paste0("HHpo.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_HHpo.09 <- paste0("HHpo.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_HHpo.14 <- paste0("HHpo.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_HHpo.19 <- paste0("HHpo.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
- vars_HHre.99 <- paste0("HHre.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_HHre.04 <- paste0("HHre.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_HHre.09 <- paste0("HHre.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_HHre.14 <- paste0("HHre.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_HHre.19 <- paste0("HHre.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
- 
- vars_HHva.99 <- paste0("HHva.", c("pri_99", "con_99", "man_99", "com_99", "ser_99"))
- vars_HHva.04 <- paste0("HHva.", c("pri_04", "con_04", "man_04", "com_04", "ser_04"))
- vars_HHva.09 <- paste0("HHva.", c("pri_09", "con_09", "man_09", "com_09", "ser_09"))
- vars_HHva.14 <- paste0("HHva.", c("pri_14", "con_14", "man_14", "com_14", "ser_14"))
- vars_HHva.19 <- paste0("HHva.", c("pri_19", "con_19", "man_19", "com_19", "ser_19"))
-
-  # Obtener los datos de la base según el año y variables seleccionadas
-  
-  filtered_data_HHue <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_HHue.99,
-                                                 "2004" = vars_HHue.04,
-                                                 "2009" = vars_HHue.09,
-                                                 "2014" = vars_HHue.14,
-                                                 "2019" = vars_HHue.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_HHaf <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_HHaf.99,
-                                                 "2004" = vars_HHaf.04,
-                                                 "2009" = vars_HHaf.09,
-                                                 "2014" = vars_HHaf.14,
-                                                 "2019" = vars_HHaf.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_HHfb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_HHfb.99,
-                                                 "2004" = vars_HHfb.04,
-                                                 "2009" = vars_HHfb.09,
-                                                 "2014" = vars_HHfb.14,
-                                                 "2019" = vars_HHfb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_HHpb <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_HHpb.99,
-                                                 "2004" = vars_HHpb.04,
-                                                 "2009" = vars_HHpb.09,
-                                                 "2014" = vars_HHpb.14,
-                                                 "2019" = vars_HHpb.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_HHpo <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_HHpo.99,
-                                                 "2004" = vars_HHpo.04,
-                                                 "2009" = vars_HHpo.09,
-                                                 "2014" = vars_HHpo.14,
-                                                 "2019" = vars_HHpo.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_HHre <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_HHre.99,
-                                                 "2004" = vars_HHre.04,
-                                                 "2009" = vars_HHre.09,
-                                                 "2014" = vars_HHre.14,
-                                                 "2019" = vars_HHre.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-  filtered_data_HHva <- reactive({
-    select_cols <- c("nom_mun", "cvegeo", switch(input$year,
-                                                 "1999" = vars_HHva.99,
-                                                 "2004" = vars_HHva.04,
-                                                 "2009" = vars_HHva.09,
-                                                 "2014" = vars_HHva.14,
-                                                 "2019" = vars_HHva.19))
-    subset(Base_zona, select = select_cols)
-  })
-  
-# Cambiar nombres de columnas
-  
-output$table_HHue <- renderDataTable({
-  data <- filtered_data_HHue()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Unidades económicas",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-
-output$table_HHaf <- renderDataTable({
-  data <- filtered_data_HHaf()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Activiso fijos totales",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_HHfb <- renderDataTable({
-  data <- filtered_data_HHfb()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Formación bruta de capital fijo",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-output$table_HHpb <- renderDataTable({
-  data <- filtered_data_HHpb()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Producción bruta total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_HHpo <- renderDataTable({
-  data <- filtered_data_HHpo()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Personal ocupado total",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-
-output$table_HHre <- renderDataTable({
-  data <- filtered_data_HHre()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Remueraciones totales",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
- output$table_HHva <- renderDataTable({
-  data <- filtered_data_HHva()
-  data[] <- lapply(data, function(x) {
-    if(is.numeric(x)) {
-      format(round(as.numeric(x), 3), big.mark = ",")
-    } else {
-      x
-    }
-  })
-  setNames(data, c("Nombre", "Clave", "Primario", "Construcción", "Manufactura", "Comercio", "Servicios"))
-},
-caption = "Valor agregado censal bruto",
-options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
-rownames = FALSE,
-width = "40%")
-  
-}
-
-# Ejecutar la aplicación
-shinyApp(ui = ui, server = server)
+library(tidyverse)
+QL041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_04", Construcción = "QLue.con_04", Manufactura = "QLue.man_04", Comercio = "QLue.com_04", Servicios = "QLue.ser_04")
+# Aplicar formato a las columnas numéricas
+QL041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL041, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
 ```
+##### AF
+```{r}
+library(tidyverse)
+QL042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_04", Construcción = "QLaf.con_04", Manufactura = "QLaf.man_04", Comercio = "QLaf.com_04", Servicios = "QLaf.ser_04")
+# Aplicar formato a las columnas numéricas
+QL042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL042, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+QL043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_04", Construcción = "QLue.con_04", Manufactura = "QLue.man_04", Comercio = "QLue.com_04", Servicios = "QLue.ser_04")
+# Aplicar formato a las columnas numéricas
+QL043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL043, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+QL044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_04", Construcción = "QLpb.con_04", Manufactura = "QLpb.man_04", Comercio = "QLpb.com_04", Servicios = "QLpb.ser_04")
+# Aplicar formato a las columnas numéricas
+QL044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL044, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+QL045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_04", Construcción = "QLpo.con_04", Manufactura = "QLpo.man_04", Comercio = "QLpo.com_04", Servicios = "QLpo.ser_04")
+# Aplicar formato a las columnas numéricas
+QL045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL045, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+QL046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_04", Construcción = "QLre.con_04", Manufactura = "QLre.man_04", Comercio = "QLre.com_04", Servicios = "QLre.ser_04")
+# Aplicar formato a las columnas numéricas
+QL046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL046, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+QL047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_04", Construcción = "QLva.con_04", Manufactura = "QLva.man_04", Comercio = "QLva.com_04", Servicios = "QLva.ser_04")
+# Aplicar formato a las columnas numéricas
+QL047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL047, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2009{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+QL091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_09", Construcción = "QLue.con_09", Manufactura = "QLue.man_09", Comercio = "QLue.com_09", Servicios = "QLue.ser_09")
+# Aplicar formato a las columnas numéricas
+QL091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL091, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+QL092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_09", Construcción = "QLaf.con_09", Manufactura = "QLaf.man_09", Comercio = "QLaf.com_09", Servicios = "QLaf.ser_09")
+# Aplicar formato a las columnas numéricas
+QL092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL092, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+QL093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_09", Construcción = "QLue.con_09", Manufactura = "QLue.man_09", Comercio = "QLue.com_09", Servicios = "QLue.ser_09")
+# Aplicar formato a las columnas numéricas
+QL093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL093, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+QL094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_09", Construcción = "QLpb.con_09", Manufactura = "QLpb.man_09", Comercio = "QLpb.com_09", Servicios = "QLpb.ser_09")
+# Aplicar formato a las columnas numéricas
+QL094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL094, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+QL095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_09", Construcción = "QLpo.con_09", Manufactura = "QLpo.man_09", Comercio = "QLpo.com_09", Servicios = "QLpo.ser_09")
+# Aplicar formato a las columnas numéricas
+QL095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL095, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+QL096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_09", Construcción = "QLre.con_09", Manufactura = "QLre.man_09", Comercio = "QLre.com_09", Servicios = "QLre.ser_09")
+# Aplicar formato a las columnas numéricas
+QL096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL096, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+QL097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_09", Construcción = "QLva.con_09", Manufactura = "QLva.man_09", Comercio = "QLva.com_09", Servicios = "QLva.ser_09")
+# Aplicar formato a las columnas numéricas
+QL097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL097, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+#### 2014{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+QL141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_14", Construcción = "QLue.con_14", Manufactura = "QLue.man_14", Comercio = "QLue.com_14", Servicios = "QLue.ser_14")
+# Aplicar formato a las columnas numéricas
+QL141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL141, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+QL142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_14", Construcción = "QLaf.con_14", Manufactura = "QLaf.man_14", Comercio = "QLaf.com_14", Servicios = "QLaf.ser_14")
+# Aplicar formato a las columnas numéricas
+QL142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL142, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+QL143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_14", Construcción = "QLue.con_14", Manufactura = "QLue.man_14", Comercio = "QLue.com_14", Servicios = "QLue.ser_14")
+# Aplicar formato a las columnas numéricas
+QL143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL143, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+QL144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_14", Construcción = "QLpb.con_14", Manufactura = "QLpb.man_14", Comercio = "QLpb.com_14", Servicios = "QLpb.ser_14")
+# Aplicar formato a las columnas numéricas
+QL144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL144, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+QL145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_14", Construcción = "QLpo.con_14", Manufactura = "QLpo.man_14", Comercio = "QLpo.com_14", Servicios = "QLpo.ser_14")
+# Aplicar formato a las columnas numéricas
+QL145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL145, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+QL146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_14", Construcción = "QLre.con_14", Manufactura = "QLre.man_14", Comercio = "QLre.com_14", Servicios = "QLre.ser_14")
+# Aplicar formato a las columnas numéricas
+QL146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL146, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+QL147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_14", Construcción = "QLva.con_14", Manufactura = "QLva.man_14", Comercio = "QLva.com_14", Servicios = "QLva.ser_14")
+# Aplicar formato a las columnas numéricas
+QL147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL147, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2019{.tabset}
+##### UE
+```{r}
+library(tidyverse)
+QL191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_19", Construcción = "QLue.con_19", Manufactura = "QLue.man_19", Comercio = "QLue.com_19", Servicios = "QLue.ser_19")
+# Aplicar formato a las columnas numéricas
+QL191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL191, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+QL192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_19", Construcción = "QLaf.con_19", Manufactura = "QLaf.man_19", Comercio = "QLaf.com_19", Servicios = "QLaf.ser_19")
+# Aplicar formato a las columnas numéricas
+QL192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL192, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+QL193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_19", Construcción = "QLue.con_19", Manufactura = "QLue.man_19", Comercio = "QLue.com_19", Servicios = "QLue.ser_19")
+# Aplicar formato a las columnas numéricas
+QL193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL193, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+QL194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_19", Construcción = "QLpb.con_19", Manufactura = "QLpb.man_19", Comercio = "QLpb.com_19", Servicios = "QLpb.ser_19")
+# Aplicar formato a las columnas numéricas
+QL194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL194, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+QL195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_19", Construcción = "QLpo.con_19", Manufactura = "QLpo.man_19", Comercio = "QLpo.com_19", Servicios = "QLpo.ser_19")
+# Aplicar formato a las columnas numéricas
+QL195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL195, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+QL196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_19", Construcción = "QLre.con_19", Manufactura = "QLre.man_19", Comercio = "QLre.com_19", Servicios = "QLre.ser_19")
+# Aplicar formato a las columnas numéricas
+QL196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL196, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+QL197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_19", Construcción = "QLva.con_19", Manufactura = "QLva.man_19", Comercio = "QLva.com_19", Servicios = "QLva.ser_19")
+# Aplicar formato a las columnas numéricas
+QL197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(QL197, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+### {-}
+
+
+### Participación Relativa (PR) {.tabset}
+#### 1999 {.tabset}
+##### UE
+```{r}
+library(tidyverse)
+PR991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_99", Construcción = "PRue.con_99", Manufactura = "PRue.man_99", Comercio = "PRue.com_99", Servicios = "PRue.ser_99")
+# Aplicar formato a las columnas numéricas
+PR991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR991, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+PR992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_99", Construcción = "PRaf.con_99", Manufactura = "PRaf.man_99", Comercio = "PRaf.com_99", Servicios = "PRaf.ser_99")
+# Aplicar formato a las columnas numéricas
+PR992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR992, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+PR993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_99", Construcción = "PRue.con_99", Manufactura = "PRue.man_99", Comercio = "PRue.com_99", Servicios = "PRue.ser_99")
+# Aplicar formato a las columnas numéricas
+PR993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR993, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+PR994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_99", Construcción = "PRpb.con_99", Manufactura = "PRpb.man_99", Comercio = "PRpb.com_99", Servicios = "PRpb.ser_99")
+# Aplicar formato a las columnas numéricas
+PR994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR994, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+PR995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_99", Construcción = "PRpo.con_99", Manufactura = "PRpo.man_99", Comercio = "PRpo.com_99", Servicios = "PRpo.ser_99")
+# Aplicar formato a las columnas numéricas
+PR995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR995, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+PR996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_99", Construcción = "PRre.con_99", Manufactura = "PRre.man_99", Comercio = "PRre.com_99", Servicios = "PRre.ser_99")
+# Aplicar formato a las columnas numéricas
+PR996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR996, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+PR997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_99", Construcción = "PRva.con_99", Manufactura = "PRva.man_99", Comercio = "PRva.com_99", Servicios = "PRva.ser_99")
+# Aplicar formato a las columnas numéricas
+PR997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR997, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2004{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+PR041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_04", Construcción = "PRue.con_04", Manufactura = "PRue.man_04", Comercio = "PRue.com_04", Servicios = "PRue.ser_04")
+# Aplicar formato a las columnas numéricas
+PR041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR041, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+PR042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_04", Construcción = "PRaf.con_04", Manufactura = "PRaf.man_04", Comercio = "PRaf.com_04", Servicios = "PRaf.ser_04")
+# Aplicar formato a las columnas numéricas
+PR042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR042, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+PR043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_04", Construcción = "PRue.con_04", Manufactura = "PRue.man_04", Comercio = "PRue.com_04", Servicios = "PRue.ser_04")
+# Aplicar formato a las columnas numéricas
+PR043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR043, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+PR044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_04", Construcción = "PRpb.con_04", Manufactura = "PRpb.man_04", Comercio = "PRpb.com_04", Servicios = "PRpb.ser_04")
+# Aplicar formato a las columnas numéricas
+PR044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR044, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+PR045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_04", Construcción = "PRpo.con_04", Manufactura = "PRpo.man_04", Comercio = "PRpo.com_04", Servicios = "PRpo.ser_04")
+# Aplicar formato a las columnas numéricas
+PR045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR045, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+PR046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_04", Construcción = "PRre.con_04", Manufactura = "PRre.man_04", Comercio = "PRre.com_04", Servicios = "PRre.ser_04")
+# Aplicar formato a las columnas numéricas
+PR046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR046, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+PR047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_04", Construcción = "PRva.con_04", Manufactura = "PRva.man_04", Comercio = "PRva.com_04", Servicios = "PRva.ser_04")
+# Aplicar formato a las columnas numéricas
+PR047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR047, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2009{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+PR091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_09", Construcción = "PRue.con_09", Manufactura = "PRue.man_09", Comercio = "PRue.com_09", Servicios = "PRue.ser_09")
+# Aplicar formato a las columnas numéricas
+PR091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR091, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+PR092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_09", Construcción = "PRaf.con_09", Manufactura = "PRaf.man_09", Comercio = "PRaf.com_09", Servicios = "PRaf.ser_09")
+# Aplicar formato a las columnas numéricas
+PR092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR092, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+PR093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_09", Construcción = "PRue.con_09", Manufactura = "PRue.man_09", Comercio = "PRue.com_09", Servicios = "PRue.ser_09")
+# Aplicar formato a las columnas numéricas
+PR093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR093, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+PR094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_09", Construcción = "PRpb.con_09", Manufactura = "PRpb.man_09", Comercio = "PRpb.com_09", Servicios = "PRpb.ser_09")
+# Aplicar formato a las columnas numéricas
+PR094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR094, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+PR095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_09", Construcción = "PRpo.con_09", Manufactura = "PRpo.man_09", Comercio = "PRpo.com_09", Servicios = "PRpo.ser_09")
+# Aplicar formato a las columnas numéricas
+PR095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR095, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+PR096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_09", Construcción = "PRre.con_09", Manufactura = "PRre.man_09", Comercio = "PRre.com_09", Servicios = "PRre.ser_09")
+# Aplicar formato a las columnas numéricas
+PR096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR096, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+PR097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_09", Construcción = "PRva.con_09", Manufactura = "PRva.man_09", Comercio = "PRva.com_09", Servicios = "PRva.ser_09")
+# Aplicar formato a las columnas numéricas
+PR097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR097, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+#### 2014{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+PR141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_14", Construcción = "PRue.con_14", Manufactura = "PRue.man_14", Comercio = "PRue.com_14", Servicios = "PRue.ser_14")
+# Aplicar formato a las columnas numéricas
+PR141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR141, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+PR142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_14", Construcción = "PRaf.con_14", Manufactura = "PRaf.man_14", Comercio = "PRaf.com_14", Servicios = "PRaf.ser_14")
+# Aplicar formato a las columnas numéricas
+PR142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR142, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+PR143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_14", Construcción = "PRue.con_14", Manufactura = "PRue.man_14", Comercio = "PRue.com_14", Servicios = "PRue.ser_14")
+# Aplicar formato a las columnas numéricas
+PR143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR143, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+PR144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_14", Construcción = "PRpb.con_14", Manufactura = "PRpb.man_14", Comercio = "PRpb.com_14", Servicios = "PRpb.ser_14")
+# Aplicar formato a las columnas numéricas
+PR144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR144, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+PR145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_14", Construcción = "PRpo.con_14", Manufactura = "PRpo.man_14", Comercio = "PRpo.com_14", Servicios = "PRpo.ser_14")
+# Aplicar formato a las columnas numéricas
+PR145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR145, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+PR146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_14", Construcción = "PRre.con_14", Manufactura = "PRre.man_14", Comercio = "PRre.com_14", Servicios = "PRre.ser_14")
+# Aplicar formato a las columnas numéricas
+PR146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR146, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+PR147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_14", Construcción = "PRva.con_14", Manufactura = "PRva.man_14", Comercio = "PRva.com_14", Servicios = "PRva.ser_14")
+# Aplicar formato a las columnas numéricas
+PR147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR147, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2019{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+PR191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_19", Construcción = "PRue.con_19", Manufactura = "PRue.man_19", Comercio = "PRue.com_19", Servicios = "PRue.ser_19")
+# Aplicar formato a las columnas numéricas
+PR191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR191, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+PR192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_19", Construcción = "PRaf.con_19", Manufactura = "PRaf.man_19", Comercio = "PRaf.com_19", Servicios = "PRaf.ser_19")
+# Aplicar formato a las columnas numéricas
+PR192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR192, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+PR193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_19", Construcción = "PRue.con_19", Manufactura = "PRue.man_19", Comercio = "PRue.com_19", Servicios = "PRue.ser_19")
+# Aplicar formato a las columnas numéricas
+PR193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR193, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+PR194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_19", Construcción = "PRpb.con_19", Manufactura = "PRpb.man_19", Comercio = "PRpb.com_19", Servicios = "PRpb.ser_19")
+# Aplicar formato a las columnas numéricas
+PR194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR194, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+PR195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_19", Construcción = "PRpo.con_19", Manufactura = "PRpo.man_19", Comercio = "PRpo.com_19", Servicios = "PRpo.ser_19")
+# Aplicar formato a las columnas numéricas
+PR195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR195, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+PR196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_19", Construcción = "PRre.con_19", Manufactura = "PRre.man_19", Comercio = "PRre.com_19", Servicios = "PRre.ser_19")
+# Aplicar formato a las columnas numéricas
+PR196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR196, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+PR197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_19", Construcción = "PRva.con_19", Manufactura = "PRva.man_19", Comercio = "PRva.com_19", Servicios = "PRva.ser_19")
+# Aplicar formato a las columnas numéricas
+PR197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(PR197, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+### {-}
+
+### Hirschman-Herfindahl (HH) {.tabset}
+#### 1999 {.tabset}
+##### UE
+```{r}
+library(tidyverse)
+HH991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_99", Construcción = "HHue.con_99", Manufactura = "HHue.man_99", Comercio = "HHue.com_99", Servicios = "HHue.ser_99")
+# Aplicar formato a las columnas numéricas
+HH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH991, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+HH992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHaf.pri_99", Construcción = "HHaf.con_99", Manufactura = "HHaf.man_99", Comercio = "HHaf.com_99", Servicios = "HHaf.ser_99")
+# Aplicar formato a las columnas numéricas
+HH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH992, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+HH993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_99", Construcción = "HHue.con_99", Manufactura = "HHue.man_99", Comercio = "HHue.com_99", Servicios = "HHue.ser_99")
+# Aplicar formato a las columnas numéricas
+HH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH993, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+HH994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpb.pri_99", Construcción = "HHpb.con_99", Manufactura = "HHpb.man_99", Comercio = "HHpb.com_99", Servicios = "HHpb.ser_99")
+# Aplicar formato a las columnas numéricas
+HH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH994, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+HH995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpo.pri_99", Construcción = "HHpo.con_99", Manufactura = "HHpo.man_99", Comercio = "HHpo.com_99", Servicios = "HHpo.ser_99")
+# Aplicar formato a las columnas numéricas
+HH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH995, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+HH996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHre.pri_99", Construcción = "HHre.con_99", Manufactura = "HHre.man_99", Comercio = "HHre.com_99", Servicios = "HHre.ser_99")
+# Aplicar formato a las columnas numéricas
+HH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH996, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+HH997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHva.pri_99", Construcción = "HHva.con_99", Manufactura = "HHva.man_99", Comercio = "HHva.com_99", Servicios = "HHva.ser_99")
+# Aplicar formato a las columnas numéricas
+HH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH997, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2004{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+HH041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_04", Construcción = "HHue.con_04", Manufactura = "HHue.man_04", Comercio = "HHue.com_04", Servicios = "HHue.ser_04")
+# Aplicar formato a las columnas numéricas
+HH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH041, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+HH042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHaf.pri_04", Construcción = "HHaf.con_04", Manufactura = "HHaf.man_04", Comercio = "HHaf.com_04", Servicios = "HHaf.ser_04")
+# Aplicar formato a las columnas numéricas
+HH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH042, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+HH043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_04", Construcción = "HHue.con_04", Manufactura = "HHue.man_04", Comercio = "HHue.com_04", Servicios = "HHue.ser_04")
+# Aplicar formato a las columnas numéricas
+HH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH043, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+HH044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpb.pri_04", Construcción = "HHpb.con_04", Manufactura = "HHpb.man_04", Comercio = "HHpb.com_04", Servicios = "HHpb.ser_04")
+# Aplicar formato a las columnas numéricas
+HH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH044, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+HH045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpo.pri_04", Construcción = "HHpo.con_04", Manufactura = "HHpo.man_04", Comercio = "HHpo.com_04", Servicios = "HHpo.ser_04")
+# Aplicar formato a las columnas numéricas
+HH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH045, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+HH046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHre.pri_04", Construcción = "HHre.con_04", Manufactura = "HHre.man_04", Comercio = "HHre.com_04", Servicios = "HHre.ser_04")
+# Aplicar formato a las columnas numéricas
+HH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH046, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+HH047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHva.pri_04", Construcción = "HHva.con_04", Manufactura = "HHva.man_04", Comercio = "HHva.com_04", Servicios = "HHva.ser_04")
+# Aplicar formato a las columnas numéricas
+HH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH047, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2009{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+HH091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_09", Construcción = "HHue.con_09", Manufactura = "HHue.man_09", Comercio = "HHue.com_09", Servicios = "HHue.ser_09")
+# Aplicar formato a las columnas numéricas
+HH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH091, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+HH092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHaf.pri_09", Construcción = "HHaf.con_09", Manufactura = "HHaf.man_09", Comercio = "HHaf.com_09", Servicios = "HHaf.ser_09")
+# Aplicar formato a las columnas numéricas
+HH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH092, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+HH093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_09", Construcción = "HHue.con_09", Manufactura = "HHue.man_09", Comercio = "HHue.com_09", Servicios = "HHue.ser_09")
+# Aplicar formato a las columnas numéricas
+HH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH093, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+HH094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpb.pri_09", Construcción = "HHpb.con_09", Manufactura = "HHpb.man_09", Comercio = "HHpb.com_09", Servicios = "HHpb.ser_09")
+# Aplicar formato a las columnas numéricas
+HH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH094, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+HH095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpo.pri_09", Construcción = "HHpo.con_09", Manufactura = "HHpo.man_09", Comercio = "HHpo.com_09", Servicios = "HHpo.ser_09")
+# Aplicar formato a las columnas numéricas
+HH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH095, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+HH096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHre.pri_09", Construcción = "HHre.con_09", Manufactura = "HHre.man_09", Comercio = "HHre.com_09", Servicios = "HHre.ser_09")
+# Aplicar formato a las columnas numéricas
+HH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH096, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+HH097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHva.pri_09", Construcción = "HHva.con_09", Manufactura = "HHva.man_09", Comercio = "HHva.com_09", Servicios = "HHva.ser_09")
+# Aplicar formato a las columnas numéricas
+HH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH097, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+#### 2014{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+HH141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_14", Construcción = "HHue.con_14", Manufactura = "HHue.man_14", Comercio = "HHue.com_14", Servicios = "HHue.ser_14")
+# Aplicar formato a las columnas numéricas
+HH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH141, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+HH142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHaf.pri_14", Construcción = "HHaf.con_14", Manufactura = "HHaf.man_14", Comercio = "HHaf.com_14", Servicios = "HHaf.ser_14")
+# Aplicar formato a las columnas numéricas
+HH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH142, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+HH143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_14", Construcción = "HHue.con_14", Manufactura = "HHue.man_14", Comercio = "HHue.com_14", Servicios = "HHue.ser_14")
+# Aplicar formato a las columnas numéricas
+HH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH143, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+HH144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpb.pri_14", Construcción = "HHpb.con_14", Manufactura = "HHpb.man_14", Comercio = "HHpb.com_14", Servicios = "HHpb.ser_14")
+# Aplicar formato a las columnas numéricas
+HH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH144, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+HH145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpo.pri_14", Construcción = "HHpo.con_14", Manufactura = "HHpo.man_14", Comercio = "HHpo.com_14", Servicios = "HHpo.ser_14")
+# Aplicar formato a las columnas numéricas
+HH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH145, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+HH146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHre.pri_14", Construcción = "HHre.con_14", Manufactura = "HHre.man_14", Comercio = "HHre.com_14", Servicios = "HHre.ser_14")
+# Aplicar formato a las columnas numéricas
+HH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH146, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+HH147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHva.pri_14", Construcción = "HHva.con_14", Manufactura = "HHva.man_14", Comercio = "HHva.com_14", Servicios = "HHva.ser_14")
+# Aplicar formato a las columnas numéricas
+HH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH147, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2019{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+HH191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_19", Construcción = "HHue.con_19", Manufactura = "HHue.man_19", Comercio = "HHue.com_19", Servicios = "HHue.ser_19")
+# Aplicar formato a las columnas numéricas
+HH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH191, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+HH192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHaf.pri_19", Construcción = "HHaf.con_19", Manufactura = "HHaf.man_19", Comercio = "HHaf.com_19", Servicios = "HHaf.ser_19")
+# Aplicar formato a las columnas numéricas
+HH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH192, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+HH193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_19", Construcción = "HHue.con_19", Manufactura = "HHue.man_19", Comercio = "HHue.com_19", Servicios = "HHue.ser_19")
+# Aplicar formato a las columnas numéricas
+HH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH193, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+HH194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpb.pri_19", Construcción = "HHpb.con_19", Manufactura = "HHpb.man_19", Comercio = "HHpb.com_19", Servicios = "HHpb.ser_19")
+# Aplicar formato a las columnas numéricas
+HH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH194, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+HH195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHpo.pri_19", Construcción = "HHpo.con_19", Manufactura = "HHpo.man_19", Comercio = "HHpo.com_19", Servicios = "HHpo.ser_19")
+# Aplicar formato a las columnas numéricas
+HH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH195, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+HH196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHre.pri_19", Construcción = "HHre.con_19", Manufactura = "HHre.man_19", Comercio = "HHre.com_19", Servicios = "HHre.ser_19")
+# Aplicar formato a las columnas numéricas
+HH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH196, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+HH197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHva.pri_19", Construcción = "HHva.con_19", Manufactura = "HHva.man_19", Comercio = "HHva.com_19", Servicios = "HHva.ser_19")
+# Aplicar formato a las columnas numéricas
+HH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(HH197, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+### {-}
+
+### Inverso de Hirschman-Herfindahl (IHH) {.tabset}
+#### 1999 {.tabset}
+##### UE
+```{r}
+library(tidyverse)
+IHH991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_99", Construcción = "IHHue.con_99", Manufactura = "IHHue.man_99", Comercio = "IHHue.com_99", Servicios = "IHHue.ser_99")
+# Aplicar formato a las columnas numéricas
+IHH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH991, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+IHH992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_99", Construcción = "IHHaf.con_99", Manufactura = "IHHaf.man_99", Comercio = "IHHaf.com_99", Servicios = "IHHaf.ser_99")
+# Aplicar formato a las columnas numéricas
+IHH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH992, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+IHH993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_99", Construcción = "IHHue.con_99", Manufactura = "IHHue.man_99", Comercio = "IHHue.com_99", Servicios = "IHHue.ser_99")
+# Aplicar formato a las columnas numéricas
+IHH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH993, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+IHH994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_99", Construcción = "IHHpb.con_99", Manufactura = "IHHpb.man_99", Comercio = "IHHpb.com_99", Servicios = "IHHpb.ser_99")
+# Aplicar formato a las columnas numéricas
+IHH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH994, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+IHH995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_99", Construcción = "IHHpo.con_99", Manufactura = "IHHpo.man_99", Comercio = "IHHpo.com_99", Servicios = "IHHpo.ser_99")
+# Aplicar formato a las columnas numéricas
+IHH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH995, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+IHH996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_99", Construcción = "IHHre.con_99", Manufactura = "IHHre.man_99", Comercio = "IHHre.com_99", Servicios = "IHHre.ser_99")
+# Aplicar formato a las columnas numéricas
+IHH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH996, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+IHH997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_99", Construcción = "IHHva.con_99", Manufactura = "IHHva.man_99", Comercio = "IHHva.com_99", Servicios = "IHHva.ser_99")
+# Aplicar formato a las columnas numéricas
+IHH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH997, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2004{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+IHH041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_04", Construcción = "IHHue.con_04", Manufactura = "IHHue.man_04", Comercio = "IHHue.com_04", Servicios = "IHHue.ser_04")
+# Aplicar formato a las columnas numéricas
+IHH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH041, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+IHH042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_04", Construcción = "IHHaf.con_04", Manufactura = "IHHaf.man_04", Comercio = "IHHaf.com_04", Servicios = "IHHaf.ser_04")
+# Aplicar formato a las columnas numéricas
+IHH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH042, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+IHH043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_04", Construcción = "IHHue.con_04", Manufactura = "IHHue.man_04", Comercio = "IHHue.com_04", Servicios = "IHHue.ser_04")
+# Aplicar formato a las columnas numéricas
+IHH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH043, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+IHH044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_04", Construcción = "IHHpb.con_04", Manufactura = "IHHpb.man_04", Comercio = "IHHpb.com_04", Servicios = "IHHpb.ser_04")
+# Aplicar formato a las columnas numéricas
+IHH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH044, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+IHH045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_04", Construcción = "IHHpo.con_04", Manufactura = "IHHpo.man_04", Comercio = "IHHpo.com_04", Servicios = "IHHpo.ser_04")
+# Aplicar formato a las columnas numéricas
+IHH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH045, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+IHH046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_04", Construcción = "IHHre.con_04", Manufactura = "IHHre.man_04", Comercio = "IHHre.com_04", Servicios = "IHHre.ser_04")
+# Aplicar formato a las columnas numéricas
+IHH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH046, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+IHH047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_04", Construcción = "IHHva.con_04", Manufactura = "IHHva.man_04", Comercio = "IHHva.com_04", Servicios = "IHHva.ser_04")
+# Aplicar formato a las columnas numéricas
+IHH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH047, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2009{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+IHH091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_09", Construcción = "IHHue.con_09", Manufactura = "IHHue.man_09", Comercio = "IHHue.com_09", Servicios = "IHHue.ser_09")
+# Aplicar formato a las columnas numéricas
+IHH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH091, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+IHH092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_09", Construcción = "IHHaf.con_09", Manufactura = "IHHaf.man_09", Comercio = "IHHaf.com_09", Servicios = "IHHaf.ser_09")
+# Aplicar formato a las columnas numéricas
+IHH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH092, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+IHH093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_09", Construcción = "IHHue.con_09", Manufactura = "IHHue.man_09", Comercio = "IHHue.com_09", Servicios = "IHHue.ser_09")
+# Aplicar formato a las columnas numéricas
+IHH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH093, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+IHH094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_09", Construcción = "IHHpb.con_09", Manufactura = "IHHpb.man_09", Comercio = "IHHpb.com_09", Servicios = "IHHpb.ser_09")
+# Aplicar formato a las columnas numéricas
+IHH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH094, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+IHH095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_09", Construcción = "IHHpo.con_09", Manufactura = "IHHpo.man_09", Comercio = "IHHpo.com_09", Servicios = "IHHpo.ser_09")
+# Aplicar formato a las columnas numéricas
+IHH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH095, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+IHH096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_09", Construcción = "IHHre.con_09", Manufactura = "IHHre.man_09", Comercio = "IHHre.com_09", Servicios = "IHHre.ser_09")
+# Aplicar formato a las columnas numéricas
+IHH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH096, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+IHH097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_09", Construcción = "IHHva.con_09", Manufactura = "IHHva.man_09", Comercio = "IHHva.com_09", Servicios = "IHHva.ser_09")
+# Aplicar formato a las columnas numéricas
+IHH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH097, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+#### 2014{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+IHH141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_14", Construcción = "IHHue.con_14", Manufactura = "IHHue.man_14", Comercio = "IHHue.com_14", Servicios = "IHHue.ser_14")
+# Aplicar formato a las columnas numéricas
+IHH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH141, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+IHH142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_14", Construcción = "IHHaf.con_14", Manufactura = "IHHaf.man_14", Comercio = "IHHaf.com_14", Servicios = "IHHaf.ser_14")
+# Aplicar formato a las columnas numéricas
+IHH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH142, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+IHH143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_14", Construcción = "IHHue.con_14", Manufactura = "IHHue.man_14", Comercio = "IHHue.com_14", Servicios = "IHHue.ser_14")
+# Aplicar formato a las columnas numéricas
+IHH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH143, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+IHH144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_14", Construcción = "IHHpb.con_14", Manufactura = "IHHpb.man_14", Comercio = "IHHpb.com_14", Servicios = "IHHpb.ser_14")
+# Aplicar formato a las columnas numéricas
+IHH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH144, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+IHH145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_14", Construcción = "IHHpo.con_14", Manufactura = "IHHpo.man_14", Comercio = "IHHpo.com_14", Servicios = "IHHpo.ser_14")
+# Aplicar formato a las columnas numéricas
+IHH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH145, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+IHH146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_14", Construcción = "IHHre.con_14", Manufactura = "IHHre.man_14", Comercio = "IHHre.com_14", Servicios = "IHHre.ser_14")
+# Aplicar formato a las columnas numéricas
+IHH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH146, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+IHH147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_14", Construcción = "IHHva.con_14", Manufactura = "IHHva.man_14", Comercio = "IHHva.com_14", Servicios = "IHHva.ser_14")
+# Aplicar formato a las columnas numéricas
+IHH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH147, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+
+#### 2019{.tabset}
+
+##### UE
+```{r}
+library(tidyverse)
+IHH191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_19", Construcción = "IHHue.con_19", Manufactura = "IHHue.man_19", Comercio = "IHHue.com_19", Servicios = "IHHue.ser_19")
+# Aplicar formato a las columnas numéricas
+IHH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH191, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### AF
+```{r}
+library(tidyverse)
+IHH192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_19", Construcción = "IHHaf.con_19", Manufactura = "IHHaf.man_19", Comercio = "IHHaf.com_19", Servicios = "IHHaf.ser_19")
+# Aplicar formato a las columnas numéricas
+IHH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH192, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### FB
+```{r}
+library(tidyverse)
+IHH193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_19", Construcción = "IHHue.con_19", Manufactura = "IHHue.man_19", Comercio = "IHHue.com_19", Servicios = "IHHue.ser_19")
+# Aplicar formato a las columnas numéricas
+IHH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH193, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PB
+```{r}
+library(tidyverse)
+IHH194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_19", Construcción = "IHHpb.con_19", Manufactura = "IHHpb.man_19", Comercio = "IHHpb.com_19", Servicios = "IHHpb.ser_19")
+# Aplicar formato a las columnas numéricas
+IHH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH194, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### PO
+```{r}
+library(tidyverse)
+IHH195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_19", Construcción = "IHHpo.con_19", Manufactura = "IHHpo.man_19", Comercio = "IHHpo.com_19", Servicios = "IHHpo.ser_19")
+# Aplicar formato a las columnas numéricas
+IHH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH195, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### RE
+```{r}
+library(tidyverse)
+IHH196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_19", Construcción = "IHHre.con_19", Manufactura = "IHHre.man_19", Comercio = "IHHre.com_19", Servicios = "IHHre.ser_19")
+# Aplicar formato a las columnas numéricas
+IHH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH196, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+##### VA
+```{r}
+library(tidyverse)
+IHH197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_19", Construcción = "IHHva.con_19", Manufactura = "IHHva.man_19", Comercio = "IHHva.com_19", Servicios = "IHHva.ser_19")
+# Aplicar formato a las columnas numéricas
+IHH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+datatable(IHH197, 
+          options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
+          rownames = FALSE)
+```
+### {-}

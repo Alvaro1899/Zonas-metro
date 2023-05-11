@@ -18,6 +18,7 @@ library(openxlsx)
 library(readxl)
 library(kableExtra)
 library(DT) # Se agrega la librería DT
+library(googledrive)
 
 tabla_unica <- read_excel("Bases de datos/tabla_unica.xlsx") %>%
   select(NOM_ZM, CVE_ZM) %>% 

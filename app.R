@@ -1,7 +1,5 @@
 library(shiny)
-library(semantic.dashboard)
 library(shiny.semantic)
-
 ui <- semanticPage(
   
   # Agrega una imagen

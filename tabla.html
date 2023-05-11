@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Lista de nombres</title>
+	<script>
+		function mostrarImagen() {
+			var lista = document.getElementById("nombres");
+			var indice = lista.selectedIndex;
+			var nombreImagen = lista.options[indice].value;
+			var imagen = document.getElementById("imagen");
+			imagen.src = nombreImagen;
+		}
+	</script>
+</head>
+<body>
+	<h1>Lista de nombres</h1>
+	<label for="nombres">Selecciona un nombre:</label>
+	<select id="nombres" onchange="mostrarImagen()">
+		<option value="imagen1.jpg">Nombre 1</option>
+		<option value="imagen2.jpg">Nombre 2</option>
+		<option value="imagen3.jpg">Nombre 3</option>
+		<option value="imagen4.jpg">Nombre 4</option>
+	</select>
+	<br>
+	<img id="imagen" src="">
+</body>
+</html>

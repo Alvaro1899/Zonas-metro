@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lista desplegable con tablas en R</title>
+  <style>
+    .tabla-r {
+      display: none; /* Ocultar todas las tablas de R al principio */
+    }
+
+    .tabla-r.mostrar {
+      display: block; /* Mostrar la tabla seleccionada */
+    }
+  </style>
+</head>
+<body>
+  <h1>Lista desplegable con tablas en R</h1>
+
+  <label for="tabla-seleccionada">Selecciona una tabla:</label>
+  <select id="tabla-seleccionada" onchange="mostrarTabla(this.value)">
+    <option value="">Seleccionar</option>
+    <option value="tabla1">Tabla 1</option>
+    <option value="tabla2">Tabla 2</option>
+    <option value="tabla3">Tabla 3</option>
+  </select>
+
+  <div id="tabla-contenedor">
+    <!-- Aquí se mostrarán las tablas generadas por R -->
+  </div>
+
+  <script>
+    function mostrarTabla(tablaSeleccionada) {
+      // Ocultar todas las tablas de R
+      var tablas = document.getElementsByClassName("tabla-r");
+      for (var i = 0; i < tablas.length; i++) {
+        tablas[i].classList.remove("mostrar");
+      }
+
+      // Mostrar la tabla seleccionada
+      if (tablaSeleccionada) {
+        var tabla = document.getElementById(tablaSeleccionada);
+        if (tabla) {
+          tabla.classList.add("mostrar");
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
