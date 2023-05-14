@@ -303,14 +303,14 @@ $QL_ij$=$(X_ij⁄X_j )/(X_in⁄X_n)$
 
 $HH_ij$=$X_ij/X_in - X_j/X_n$
 
-$IHH_ij$=$1/HH$
+$IHH_ij$=$1/(X_ij/X_in - X_j/X_n)$
 
 Donde:
 
-$X_ij$= Variable económica del sector i en el municipio j 
-$X_j$= Variable económica del total de los sectores en el municipio j  
-$X_in$= Variable económica del sector i de la Zona Metropolitana del municipio j
-$X_n$= Variable económica del total de los sectores Zona Metropolitana del municipio j
+* $X_ij$= Variable económica del sector i en el municipio j 
+* $X_j$= Variable económica del total de los sectores en el municipio j  
+* $X_in$= Variable económica del sector i de la Zona Metropolitana del municipio j
+* $X_n$= Variable económica del total de los sectores Zona Metropolitana del municipio j
 
 ### Cifras brutas {.tabset}
 #### 1999 {.tabset}
@@ -757,7 +757,10 @@ datatable(Cb197,
 library(tidyverse)
 QL991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_99", Construcción = "QLue.con_99", Manufactura = "QLue.man_99", Comercio = "QLue.com_99", Servicios = "QLue.ser_99")
 # Aplicar formato a las columnas numéricas
-QL991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL991 <- QL991 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL991, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -766,8 +769,11 @@ datatable(QL991,
 ```{r}
 library(tidyverse)
 QL992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_99", Construcción = "QLaf.con_99", Manufactura = "QLaf.man_99", Comercio = "QLaf.com_99", Servicios = "QLaf.ser_99")
+
 # Aplicar formato a las columnas numéricas
-QL992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+QL992 <- QL992 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL992, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -776,8 +782,12 @@ datatable(QL992,
 ```{r}
 library(tidyverse)
 QL993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_99", Construcción = "QLue.con_99", Manufactura = "QLue.man_99", Comercio = "QLue.com_99", Servicios = "QLue.ser_99")
+
 # Aplicar formato a las columnas numéricas
-QL993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL993 <- QL993 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL993, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -786,8 +796,12 @@ datatable(QL993,
 ```{r}
 library(tidyverse)
 QL994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_99", Construcción = "QLpb.con_99", Manufactura = "QLpb.man_99", Comercio = "QLpb.com_99", Servicios = "QLpb.ser_99")
+
 # Aplicar formato a las columnas numéricas
-QL994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL994 <- QL994 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL994, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -796,8 +810,12 @@ datatable(QL994,
 ```{r}
 library(tidyverse)
 QL995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_99", Construcción = "QLpo.con_99", Manufactura = "QLpo.man_99", Comercio = "QLpo.com_99", Servicios = "QLpo.ser_99")
+
 # Aplicar formato a las columnas numéricas
-QL995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL995 <- QL995 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL995, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -806,8 +824,12 @@ datatable(QL995,
 ```{r}
 library(tidyverse)
 QL996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_99", Construcción = "QLre.con_99", Manufactura = "QLre.man_99", Comercio = "QLre.com_99", Servicios = "QLre.ser_99")
+
 # Aplicar formato a las columnas numéricas
-QL996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL996 <- QL996 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL996, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -816,8 +838,12 @@ datatable(QL996,
 ```{r}
 library(tidyverse)
 QL997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_99", Construcción = "QLva.con_99", Manufactura = "QLva.man_99", Comercio = "QLva.com_99", Servicios = "QLva.ser_99")
+
 # Aplicar formato a las columnas numéricas
-QL997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL997 <- QL997 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL997, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -829,8 +855,12 @@ datatable(QL997,
 ```{r}
 library(tidyverse)
 QL041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_04", Construcción = "QLue.con_04", Manufactura = "QLue.man_04", Comercio = "QLue.com_04", Servicios = "QLue.ser_04")
+
 # Aplicar formato a las columnas numéricas
-QL041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL041 <- QL041 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL041, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -839,8 +869,13 @@ datatable(QL041,
 ```{r}
 library(tidyverse)
 QL042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_04", Construcción = "QLaf.con_04", Manufactura = "QLaf.man_04", Comercio = "QLaf.com_04", Servicios = "QLaf.ser_04")
+
 # Aplicar formato a las columnas numéricas
-QL042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL042 <- QL042 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
+
 datatable(QL042, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -849,8 +884,12 @@ datatable(QL042,
 ```{r}
 library(tidyverse)
 QL043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_04", Construcción = "QLue.con_04", Manufactura = "QLue.man_04", Comercio = "QLue.com_04", Servicios = "QLue.ser_04")
+
 # Aplicar formato a las columnas numéricas
-QL043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL043 <- QL043 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL043, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -859,8 +898,12 @@ datatable(QL043,
 ```{r}
 library(tidyverse)
 QL044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_04", Construcción = "QLpb.con_04", Manufactura = "QLpb.man_04", Comercio = "QLpb.com_04", Servicios = "QLpb.ser_04")
+
 # Aplicar formato a las columnas numéricas
-QL044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL044 <- QL044 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL044, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -869,8 +912,12 @@ datatable(QL044,
 ```{r}
 library(tidyverse)
 QL045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_04", Construcción = "QLpo.con_04", Manufactura = "QLpo.man_04", Comercio = "QLpo.com_04", Servicios = "QLpo.ser_04")
+
 # Aplicar formato a las columnas numéricas
-QL045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL045 <- QL045 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL045, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -879,8 +926,12 @@ datatable(QL045,
 ```{r}
 library(tidyverse)
 QL046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_04", Construcción = "QLre.con_04", Manufactura = "QLre.man_04", Comercio = "QLre.com_04", Servicios = "QLre.ser_04")
+
 # Aplicar formato a las columnas numéricas
-QL046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL046 <- QL046 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL046, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -889,8 +940,12 @@ datatable(QL046,
 ```{r}
 library(tidyverse)
 QL047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_04", Construcción = "QLva.con_04", Manufactura = "QLva.man_04", Comercio = "QLva.com_04", Servicios = "QLva.ser_04")
+
 # Aplicar formato a las columnas numéricas
-QL047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL047 <- QL047 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL047, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -902,8 +957,12 @@ datatable(QL047,
 ```{r}
 library(tidyverse)
 QL091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_09", Construcción = "QLue.con_09", Manufactura = "QLue.man_09", Comercio = "QLue.com_09", Servicios = "QLue.ser_09")
+
 # Aplicar formato a las columnas numéricas
-QL091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL091 <- QL091 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL091, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -912,8 +971,12 @@ datatable(QL091,
 ```{r}
 library(tidyverse)
 QL092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_09", Construcción = "QLaf.con_09", Manufactura = "QLaf.man_09", Comercio = "QLaf.com_09", Servicios = "QLaf.ser_09")
+
 # Aplicar formato a las columnas numéricas
-QL092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL092 <- QL092 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL092, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -922,8 +985,12 @@ datatable(QL092,
 ```{r}
 library(tidyverse)
 QL093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_09", Construcción = "QLue.con_09", Manufactura = "QLue.man_09", Comercio = "QLue.com_09", Servicios = "QLue.ser_09")
+
 # Aplicar formato a las columnas numéricas
-QL093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL093 <- QL093 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL093, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -932,8 +999,12 @@ datatable(QL093,
 ```{r}
 library(tidyverse)
 QL094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_09", Construcción = "QLpb.con_09", Manufactura = "QLpb.man_09", Comercio = "QLpb.com_09", Servicios = "QLpb.ser_09")
+
 # Aplicar formato a las columnas numéricas
-QL094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL094 <- QL094 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL094, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -942,8 +1013,12 @@ datatable(QL094,
 ```{r}
 library(tidyverse)
 QL095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_09", Construcción = "QLpo.con_09", Manufactura = "QLpo.man_09", Comercio = "QLpo.com_09", Servicios = "QLpo.ser_09")
+
 # Aplicar formato a las columnas numéricas
-QL095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL095 <- QL095 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL095, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -953,7 +1028,10 @@ datatable(QL095,
 library(tidyverse)
 QL096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_09", Construcción = "QLre.con_09", Manufactura = "QLre.man_09", Comercio = "QLre.com_09", Servicios = "QLre.ser_09")
 # Aplicar formato a las columnas numéricas
-QL096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL096 <- QL096 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL096, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -962,8 +1040,12 @@ datatable(QL096,
 ```{r}
 library(tidyverse)
 QL097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_09", Construcción = "QLva.con_09", Manufactura = "QLva.man_09", Comercio = "QLva.com_09", Servicios = "QLva.ser_09")
+
 # Aplicar formato a las columnas numéricas
-QL097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL097 <- QL097 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL097, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -974,8 +1056,12 @@ datatable(QL097,
 ```{r}
 library(tidyverse)
 QL141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_14", Construcción = "QLue.con_14", Manufactura = "QLue.man_14", Comercio = "QLue.com_14", Servicios = "QLue.ser_14")
+
 # Aplicar formato a las columnas numéricas
-QL141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL141 <- QL141 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL141, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -984,8 +1070,12 @@ datatable(QL141,
 ```{r}
 library(tidyverse)
 QL142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_14", Construcción = "QLaf.con_14", Manufactura = "QLaf.man_14", Comercio = "QLaf.com_14", Servicios = "QLaf.ser_14")
+
 # Aplicar formato a las columnas numéricas
-QL142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL142 <- QL142 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL142, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -994,8 +1084,12 @@ datatable(QL142,
 ```{r}
 library(tidyverse)
 QL143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_14", Construcción = "QLue.con_14", Manufactura = "QLue.man_14", Comercio = "QLue.com_14", Servicios = "QLue.ser_14")
+
 # Aplicar formato a las columnas numéricas
-QL143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL143 <- QL143 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL143, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1004,8 +1098,12 @@ datatable(QL143,
 ```{r}
 library(tidyverse)
 QL144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_14", Construcción = "QLpb.con_14", Manufactura = "QLpb.man_14", Comercio = "QLpb.com_14", Servicios = "QLpb.ser_14")
+
 # Aplicar formato a las columnas numéricas
-QL144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL144 <- QL144 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL144, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1014,8 +1112,12 @@ datatable(QL144,
 ```{r}
 library(tidyverse)
 QL145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_14", Construcción = "QLpo.con_14", Manufactura = "QLpo.man_14", Comercio = "QLpo.com_14", Servicios = "QLpo.ser_14")
+
 # Aplicar formato a las columnas numéricas
-QL145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL145 <- QL145 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL145, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1024,8 +1126,12 @@ datatable(QL145,
 ```{r}
 library(tidyverse)
 QL146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_14", Construcción = "QLre.con_14", Manufactura = "QLre.man_14", Comercio = "QLre.com_14", Servicios = "QLre.ser_14")
+
 # Aplicar formato a las columnas numéricas
-QL146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL146 <- QL146 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL146, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1034,8 +1140,12 @@ datatable(QL146,
 ```{r}
 library(tidyverse)
 QL147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_14", Construcción = "QLva.con_14", Manufactura = "QLva.man_14", Comercio = "QLva.com_14", Servicios = "QLva.ser_14")
+
 # Aplicar formato a las columnas numéricas
-QL147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL147 <- QL147 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL147, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1046,8 +1156,12 @@ datatable(QL147,
 ```{r}
 library(tidyverse)
 QL191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_19", Construcción = "QLue.con_19", Manufactura = "QLue.man_19", Comercio = "QLue.com_19", Servicios = "QLue.ser_19")
+
 # Aplicar formato a las columnas numéricas
-QL191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL191 <- QL191 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL191, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1056,8 +1170,12 @@ datatable(QL191,
 ```{r}
 library(tidyverse)
 QL192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLaf.pri_19", Construcción = "QLaf.con_19", Manufactura = "QLaf.man_19", Comercio = "QLaf.com_19", Servicios = "QLaf.ser_19")
+
 # Aplicar formato a las columnas numéricas
-QL192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL192 <- QL192 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL192, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1066,8 +1184,12 @@ datatable(QL192,
 ```{r}
 library(tidyverse)
 QL193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLue.pri_19", Construcción = "QLue.con_19", Manufactura = "QLue.man_19", Comercio = "QLue.com_19", Servicios = "QLue.ser_19")
+
 # Aplicar formato a las columnas numéricas
-QL193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL193 <- QL193 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL193, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1076,8 +1198,12 @@ datatable(QL193,
 ```{r}
 library(tidyverse)
 QL194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpb.pri_19", Construcción = "QLpb.con_19", Manufactura = "QLpb.man_19", Comercio = "QLpb.com_19", Servicios = "QLpb.ser_19")
+
 # Aplicar formato a las columnas numéricas
-QL194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL194 <- QL194 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL194, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1086,8 +1212,12 @@ datatable(QL194,
 ```{r}
 library(tidyverse)
 QL195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLpo.pri_19", Construcción = "QLpo.con_19", Manufactura = "QLpo.man_19", Comercio = "QLpo.com_19", Servicios = "QLpo.ser_19")
+
 # Aplicar formato a las columnas numéricas
-QL195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL195 <- QL195 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL195, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1096,8 +1226,12 @@ datatable(QL195,
 ```{r}
 library(tidyverse)
 QL196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLre.pri_19", Construcción = "QLre.con_19", Manufactura = "QLre.man_19", Comercio = "QLre.com_19", Servicios = "QLre.ser_19")
+
 # Aplicar formato a las columnas numéricas
-QL196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL196 <- QL196 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL196, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1106,8 +1240,12 @@ datatable(QL196,
 ```{r}
 library(tidyverse)
 QL197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "QLva.pri_19", Construcción = "QLva.con_19", Manufactura = "QLva.man_19", Comercio = "QLva.com_19", Servicios = "QLva.ser_19")
+
 # Aplicar formato a las columnas numéricas
-QL197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(QL197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+QL197 <- QL197 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(QL197, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1122,7 +1260,10 @@ datatable(QL197,
 library(tidyverse)
 PR991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_99", Construcción = "PRue.con_99", Manufactura = "PRue.man_99", Comercio = "PRue.com_99", Servicios = "PRue.ser_99")
 # Aplicar formato a las columnas numéricas
-PR991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR991 <- PR991 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR991, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1131,8 +1272,12 @@ datatable(PR991,
 ```{r}
 library(tidyverse)
 PR992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_99", Construcción = "PRaf.con_99", Manufactura = "PRaf.man_99", Comercio = "PRaf.com_99", Servicios = "PRaf.ser_99")
+
 # Aplicar formato a las columnas numéricas
-PR992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR992 <- PR992 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR992, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1141,8 +1286,12 @@ datatable(PR992,
 ```{r}
 library(tidyverse)
 PR993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_99", Construcción = "PRue.con_99", Manufactura = "PRue.man_99", Comercio = "PRue.com_99", Servicios = "PRue.ser_99")
+
 # Aplicar formato a las columnas numéricas
-PR993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR993 <- PR993 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR993, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1151,8 +1300,12 @@ datatable(PR993,
 ```{r}
 library(tidyverse)
 PR994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_99", Construcción = "PRpb.con_99", Manufactura = "PRpb.man_99", Comercio = "PRpb.com_99", Servicios = "PRpb.ser_99")
+
 # Aplicar formato a las columnas numéricas
-PR994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR994 <- PR994 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR994, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1161,8 +1314,12 @@ datatable(PR994,
 ```{r}
 library(tidyverse)
 PR995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_99", Construcción = "PRpo.con_99", Manufactura = "PRpo.man_99", Comercio = "PRpo.com_99", Servicios = "PRpo.ser_99")
+
 # Aplicar formato a las columnas numéricas
-PR995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR995 <- PR995 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR995, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1171,8 +1328,12 @@ datatable(PR995,
 ```{r}
 library(tidyverse)
 PR996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_99", Construcción = "PRre.con_99", Manufactura = "PRre.man_99", Comercio = "PRre.com_99", Servicios = "PRre.ser_99")
+
 # Aplicar formato a las columnas numéricas
-PR996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR996 <- PR996 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR996, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1181,8 +1342,12 @@ datatable(PR996,
 ```{r}
 library(tidyverse)
 PR997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_99", Construcción = "PRva.con_99", Manufactura = "PRva.man_99", Comercio = "PRva.com_99", Servicios = "PRva.ser_99")
+
 # Aplicar formato a las columnas numéricas
-PR997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR997 <- PR997 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR997, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1194,8 +1359,12 @@ datatable(PR997,
 ```{r}
 library(tidyverse)
 PR041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_04", Construcción = "PRue.con_04", Manufactura = "PRue.man_04", Comercio = "PRue.com_04", Servicios = "PRue.ser_04")
+
 # Aplicar formato a las columnas numéricas
-PR041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR041 <- PR041 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR041, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1204,8 +1373,12 @@ datatable(PR041,
 ```{r}
 library(tidyverse)
 PR042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_04", Construcción = "PRaf.con_04", Manufactura = "PRaf.man_04", Comercio = "PRaf.com_04", Servicios = "PRaf.ser_04")
+
 # Aplicar formato a las columnas numéricas
-PR042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR042 <- PR042 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR042, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1214,8 +1387,12 @@ datatable(PR042,
 ```{r}
 library(tidyverse)
 PR043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_04", Construcción = "PRue.con_04", Manufactura = "PRue.man_04", Comercio = "PRue.com_04", Servicios = "PRue.ser_04")
+
 # Aplicar formato a las columnas numéricas
-PR043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR043 <- PR043 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR043, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1224,8 +1401,12 @@ datatable(PR043,
 ```{r}
 library(tidyverse)
 PR044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_04", Construcción = "PRpb.con_04", Manufactura = "PRpb.man_04", Comercio = "PRpb.com_04", Servicios = "PRpb.ser_04")
+
 # Aplicar formato a las columnas numéricas
-PR044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR044 <- PR044 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR044, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1234,8 +1415,12 @@ datatable(PR044,
 ```{r}
 library(tidyverse)
 PR045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_04", Construcción = "PRpo.con_04", Manufactura = "PRpo.man_04", Comercio = "PRpo.com_04", Servicios = "PRpo.ser_04")
+
 # Aplicar formato a las columnas numéricas
-PR045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR045 <- PR045 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR045, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1244,8 +1429,12 @@ datatable(PR045,
 ```{r}
 library(tidyverse)
 PR046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_04", Construcción = "PRre.con_04", Manufactura = "PRre.man_04", Comercio = "PRre.com_04", Servicios = "PRre.ser_04")
+
 # Aplicar formato a las columnas numéricas
-PR046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR046 <- PR046 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR046, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1254,8 +1443,12 @@ datatable(PR046,
 ```{r}
 library(tidyverse)
 PR047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_04", Construcción = "PRva.con_04", Manufactura = "PRva.man_04", Comercio = "PRva.com_04", Servicios = "PRva.ser_04")
+
 # Aplicar formato a las columnas numéricas
-PR047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR047 <- PR047 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR047, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1267,8 +1460,12 @@ datatable(PR047,
 ```{r}
 library(tidyverse)
 PR091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_09", Construcción = "PRue.con_09", Manufactura = "PRue.man_09", Comercio = "PRue.com_09", Servicios = "PRue.ser_09")
+
 # Aplicar formato a las columnas numéricas
-PR091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR091 <- PR091 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR091, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1277,8 +1474,12 @@ datatable(PR091,
 ```{r}
 library(tidyverse)
 PR092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_09", Construcción = "PRaf.con_09", Manufactura = "PRaf.man_09", Comercio = "PRaf.com_09", Servicios = "PRaf.ser_09")
+
 # Aplicar formato a las columnas numéricas
-PR092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR092 <- PR092 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR092, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1287,8 +1488,12 @@ datatable(PR092,
 ```{r}
 library(tidyverse)
 PR093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_09", Construcción = "PRue.con_09", Manufactura = "PRue.man_09", Comercio = "PRue.com_09", Servicios = "PRue.ser_09")
+
 # Aplicar formato a las columnas numéricas
-PR093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR093 <- PR093 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR093, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1297,8 +1502,12 @@ datatable(PR093,
 ```{r}
 library(tidyverse)
 PR094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_09", Construcción = "PRpb.con_09", Manufactura = "PRpb.man_09", Comercio = "PRpb.com_09", Servicios = "PRpb.ser_09")
+
 # Aplicar formato a las columnas numéricas
-PR094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR094 <- PR094 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR094, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1307,8 +1516,12 @@ datatable(PR094,
 ```{r}
 library(tidyverse)
 PR095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_09", Construcción = "PRpo.con_09", Manufactura = "PRpo.man_09", Comercio = "PRpo.com_09", Servicios = "PRpo.ser_09")
+
 # Aplicar formato a las columnas numéricas
-PR095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR095 <- PR095 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR095, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1317,8 +1530,12 @@ datatable(PR095,
 ```{r}
 library(tidyverse)
 PR096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_09", Construcción = "PRre.con_09", Manufactura = "PRre.man_09", Comercio = "PRre.com_09", Servicios = "PRre.ser_09")
+
 # Aplicar formato a las columnas numéricas
-PR096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR096 <- PR096 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR096, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1327,8 +1544,12 @@ datatable(PR096,
 ```{r}
 library(tidyverse)
 PR097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_09", Construcción = "PRva.con_09", Manufactura = "PRva.man_09", Comercio = "PRva.com_09", Servicios = "PRva.ser_09")
+
 # Aplicar formato a las columnas numéricas
-PR097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR097 <- PR097 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR097, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1339,8 +1560,12 @@ datatable(PR097,
 ```{r}
 library(tidyverse)
 PR141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_14", Construcción = "PRue.con_14", Manufactura = "PRue.man_14", Comercio = "PRue.com_14", Servicios = "PRue.ser_14")
+
 # Aplicar formato a las columnas numéricas
-PR141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR141 <- PR141 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR141, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1349,8 +1574,12 @@ datatable(PR141,
 ```{r}
 library(tidyverse)
 PR142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_14", Construcción = "PRaf.con_14", Manufactura = "PRaf.man_14", Comercio = "PRaf.com_14", Servicios = "PRaf.ser_14")
+
 # Aplicar formato a las columnas numéricas
-PR142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR142 <- PR142 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR142, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1359,8 +1588,12 @@ datatable(PR142,
 ```{r}
 library(tidyverse)
 PR143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_14", Construcción = "PRue.con_14", Manufactura = "PRue.man_14", Comercio = "PRue.com_14", Servicios = "PRue.ser_14")
+
 # Aplicar formato a las columnas numéricas
-PR143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR143 <- PR143 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR143, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1369,8 +1602,12 @@ datatable(PR143,
 ```{r}
 library(tidyverse)
 PR144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_14", Construcción = "PRpb.con_14", Manufactura = "PRpb.man_14", Comercio = "PRpb.com_14", Servicios = "PRpb.ser_14")
+
 # Aplicar formato a las columnas numéricas
-PR144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR144 <- PR144 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR144, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1379,8 +1616,12 @@ datatable(PR144,
 ```{r}
 library(tidyverse)
 PR145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_14", Construcción = "PRpo.con_14", Manufactura = "PRpo.man_14", Comercio = "PRpo.com_14", Servicios = "PRpo.ser_14")
+
 # Aplicar formato a las columnas numéricas
-PR145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR145 <- PR145 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR145, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1389,8 +1630,12 @@ datatable(PR145,
 ```{r}
 library(tidyverse)
 PR146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_14", Construcción = "PRre.con_14", Manufactura = "PRre.man_14", Comercio = "PRre.com_14", Servicios = "PRre.ser_14")
+
 # Aplicar formato a las columnas numéricas
-PR146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR146 <- PR146 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR146, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1399,8 +1644,12 @@ datatable(PR146,
 ```{r}
 library(tidyverse)
 PR147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_14", Construcción = "PRva.con_14", Manufactura = "PRva.man_14", Comercio = "PRva.com_14", Servicios = "PRva.ser_14")
+
 # Aplicar formato a las columnas numéricas
-PR147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR147 <- PR147 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR147, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1412,8 +1661,12 @@ datatable(PR147,
 ```{r}
 library(tidyverse)
 PR191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_19", Construcción = "PRue.con_19", Manufactura = "PRue.man_19", Comercio = "PRue.com_19", Servicios = "PRue.ser_19")
+
 # Aplicar formato a las columnas numéricas
-PR191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR191 <- PR191 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR191, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1422,8 +1675,12 @@ datatable(PR191,
 ```{r}
 library(tidyverse)
 PR192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRaf.pri_19", Construcción = "PRaf.con_19", Manufactura = "PRaf.man_19", Comercio = "PRaf.com_19", Servicios = "PRaf.ser_19")
+
 # Aplicar formato a las columnas numéricas
-PR192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR192 <- PR192 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR192, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1432,8 +1689,12 @@ datatable(PR192,
 ```{r}
 library(tidyverse)
 PR193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRue.pri_19", Construcción = "PRue.con_19", Manufactura = "PRue.man_19", Comercio = "PRue.com_19", Servicios = "PRue.ser_19")
+
 # Aplicar formato a las columnas numéricas
-PR193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR193 <- PR193 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR193, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1442,8 +1703,12 @@ datatable(PR193,
 ```{r}
 library(tidyverse)
 PR194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpb.pri_19", Construcción = "PRpb.con_19", Manufactura = "PRpb.man_19", Comercio = "PRpb.com_19", Servicios = "PRpb.ser_19")
+
 # Aplicar formato a las columnas numéricas
-PR194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR194 <- PR194 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR194, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1452,8 +1717,12 @@ datatable(PR194,
 ```{r}
 library(tidyverse)
 PR195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRpo.pri_19", Construcción = "PRpo.con_19", Manufactura = "PRpo.man_19", Comercio = "PRpo.com_19", Servicios = "PRpo.ser_19")
+
 # Aplicar formato a las columnas numéricas
-PR195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR195 <- PR195 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR195, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1462,8 +1731,12 @@ datatable(PR195,
 ```{r}
 library(tidyverse)
 PR196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRre.pri_19", Construcción = "PRre.con_19", Manufactura = "PRre.man_19", Comercio = "PRre.com_19", Servicios = "PRre.ser_19")
+
 # Aplicar formato a las columnas numéricas
-PR196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR196 <- PR196 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR196, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1472,8 +1745,12 @@ datatable(PR196,
 ```{r}
 library(tidyverse)
 PR197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "PRva.pri_19", Construcción = "PRva.con_19", Manufactura = "PRva.man_19", Comercio = "PRva.com_19", Servicios = "PRva.ser_19")
+
 # Aplicar formato a las columnas numéricas
-PR197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(PR197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+PR197 <- PR197 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(PR197, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1486,8 +1763,12 @@ datatable(PR197,
 ```{r}
 library(tidyverse)
 HH991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHue.pri_99", Construcción = "HHue.con_99", Manufactura = "HHue.man_99", Comercio = "HHue.com_99", Servicios = "HHue.ser_99")
+
 # Aplicar formato a las columnas numéricas
-HH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+HH991 <- HH991 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(HH991, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -1496,8 +1777,12 @@ datatable(HH991,
 ```{r}
 library(tidyverse)
 HH992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "HHaf.pri_99", Construcción = "HHaf.con_99", Manufactura = "HHaf.man_99", Comercio = "HHaf.com_99", Servicios = "HHaf.ser_99")
+
 # Aplicar formato a las columnas numéricas
-HH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(HH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+
+HH992 <- HH992 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(round(., 4), nsmall = 4)))
+
 datatable(HH992, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
