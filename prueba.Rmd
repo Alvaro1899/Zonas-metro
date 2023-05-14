@@ -317,15 +317,29 @@ $X_n$= Variable económica del total de los sectores Zona Metropolitana del muni
 ##### UE
 ```{r}
 library(tidyverse)
-Cb991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_99", Construcción = "ue.con_99", Manufactura = "ue.man_99", Comercio = "ue.com_99", Servicios = "ue.ser_99")
+library(DT)
+
+Cb991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun", Primarios = "ue.pri_99", Construcción = "ue.con_99", Manufactura = "ue.man_99", Comercio = "ue.com_99", Servicios = "ue.ser_99")
+
+Cb991 <- Cb991 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb991, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
+
 ```
 ##### AF
 ```{r}
+
 library(tidyverse)
+library(DT)
+
 Cb992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_99", Construcción = "af.con_99", Manufactura = "af.man_99", Comercio = "af.com_99", Servicios = "af.ser_99")
+
+Cb992 <- Cb992 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb992, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -334,6 +348,10 @@ datatable(Cb992,
 ```{r}
 library(tidyverse)
 Cb993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_99", Construcción = "fb.con_99", Manufactura = "fb.man_99", Comercio = "fb.com_99", Servicios = "fb.ser_99")
+
+Cb993 <- Cb993 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb993, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -342,6 +360,10 @@ datatable(Cb993,
 ```{r}
 library(tidyverse)
 Cb994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_99", Construcción = "pb.con_99", Manufactura = "pb.man_99", Comercio = "pb.com_99", Servicios = "pb.ser_99")
+
+Cb994 <- Cb994 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb994, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -350,6 +372,10 @@ datatable(Cb994,
 ```{r}
 library(tidyverse)
 Cb995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_99", Construcción = "po.con_99", Manufactura = "po.man_99", Comercio = "po.com_99", Servicios = "po.ser_99")
+
+Cb995 <- Cb995 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb995, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -358,6 +384,10 @@ datatable(Cb995,
 ```{r}
 library(tidyverse)
 Cb996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_99", Construcción = "re.con_99", Manufactura = "re.man_99", Comercio = "re.com_99", Servicios = "re.ser_99")
+
+Cb996 <- Cb996 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb996, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -366,6 +396,10 @@ datatable(Cb996,
 ```{r}
 library(tidyverse)
 Cb997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_99", Construcción = "va.con_99", Manufactura = "va.man_99", Comercio = "va.com_99", Servicios = "va.ser_99")
+
+Cb997 <- Cb997 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb997, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -377,6 +411,10 @@ datatable(Cb997,
 ```{r}
 library(tidyverse)
 Cb041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_04", Construcción = "ue.con_04", Manufactura = "ue.man_04", Comercio = "ue.com_04", Servicios = "ue.ser_04")
+
+Cb041 <- Cb041 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb041, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -385,6 +423,10 @@ datatable(Cb041,
 ```{r}
 library(tidyverse)
 Cb042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_04", Construcción = "af.con_04", Manufactura = "af.man_04", Comercio = "af.com_04", Servicios = "af.ser_04")
+
+Cb042 <- Cb042 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb042, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -393,6 +435,10 @@ datatable(Cb042,
 ```{r}
 library(tidyverse)
 Cb043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_04", Construcción = "fb.con_04", Manufactura = "fb.man_04", Comercio = "fb.com_04", Servicios = "fb.ser_04")
+
+Cb043 <- Cb043 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb043, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -401,6 +447,10 @@ datatable(Cb043,
 ```{r}
 library(tidyverse)
 Cb044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_04", Construcción = "pb.con_04", Manufactura = "pb.man_04", Comercio = "pb.com_04", Servicios = "pb.ser_04")
+
+Cb044 <- Cb044 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb044, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -409,6 +459,10 @@ datatable(Cb044,
 ```{r}
 library(tidyverse)
 Cb045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_04", Construcción = "po.con_04", Manufactura = "po.man_04", Comercio = "po.com_04", Servicios = "po.ser_04")
+
+Cb045 <- Cb045 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb045, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -417,6 +471,10 @@ datatable(Cb045,
 ```{r}
 library(tidyverse)
 Cb046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_04", Construcción = "re.con_04", Manufactura = "re.man_04", Comercio = "re.com_04", Servicios = "re.ser_04")
+
+Cb046 <- Cb046 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb046, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -425,6 +483,10 @@ datatable(Cb046,
 ```{r}
 library(tidyverse)
 Cb047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_04", Construcción = "va.con_04", Manufactura = "va.man_04", Comercio = "va.com_04", Servicios = "va.ser_04")
+
+Cb047 <- Cb047 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb047, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -435,6 +497,10 @@ datatable(Cb047,
 ```{r}
 library(tidyverse)
 Cb091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_09", Construcción = "ue.con_09", Manufactura = "ue.man_09", Comercio = "ue.com_09", Servicios = "ue.ser_09")
+
+Cb091 <- Cb091 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb091, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -443,6 +509,10 @@ datatable(Cb091,
 ```{r}
 library(tidyverse)
 Cb092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_09", Construcción = "af.con_09", Manufactura = "af.man_09", Comercio = "af.com_09", Servicios = "af.ser_09")
+
+Cb092 <- Cb092 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb092, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -451,6 +521,10 @@ datatable(Cb092,
 ```{r}
 library(tidyverse)
 Cb093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_09", Construcción = "fb.con_09", Manufactura = "fb.man_09", Comercio = "fb.com_09", Servicios = "fb.ser_09")
+
+Cb093 <- Cb093 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb093, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -459,6 +533,10 @@ datatable(Cb093,
 ```{r}
 library(tidyverse)
 Cb094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_09", Construcción = "pb.con_09", Manufactura = "pb.man_09", Comercio = "pb.com_09", Servicios = "pb.ser_09")
+
+Cb094 <- Cb094 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb094, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -467,6 +545,10 @@ datatable(Cb094,
 ```{r}
 library(tidyverse)
 Cb095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_09", Construcción = "po.con_09", Manufactura = "po.man_09", Comercio = "po.com_09", Servicios = "po.ser_09")
+
+Cb095 <- Cb095 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb095, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -475,6 +557,10 @@ datatable(Cb095,
 ```{r}
 library(tidyverse)
 Cb096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_09", Construcción = "re.con_09", Manufactura = "re.man_09", Comercio = "re.com_09", Servicios = "re.ser_09")
+
+Cb096 <- Cb096 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb096, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -483,6 +569,10 @@ datatable(Cb096,
 ```{r}
 library(tidyverse)
 Cb097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_09", Construcción = "va.con_09", Manufactura = "va.man_09", Comercio = "va.com_09", Servicios = "va.ser_09")
+
+Cb097 <- Cb097 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb097, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -493,6 +583,10 @@ datatable(Cb097,
 ```{r}
 library(tidyverse)
 Cb141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_14", Construcción = "ue.con_14", Manufactura = "ue.man_14", Comercio = "ue.com_14", Servicios = "ue.ser_14")
+
+Cb141 <- Cb141 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb141, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -501,6 +595,10 @@ datatable(Cb141,
 ```{r}
 library(tidyverse)
 Cb142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_14", Construcción = "af.con_14", Manufactura = "af.man_14", Comercio = "af.com_14", Servicios = "af.ser_14")
+
+Cb142 <- Cb142 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb142, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -509,6 +607,10 @@ datatable(Cb142,
 ```{r}
 library(tidyverse)
 Cb143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_14", Construcción = "fb.con_14", Manufactura = "fb.man_14", Comercio = "fb.com_14", Servicios = "fb.ser_14")
+
+Cb143 <- Cb143 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb143, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -517,6 +619,10 @@ datatable(Cb143,
 ```{r}
 library(tidyverse)
 Cb144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_14", Construcción = "pb.con_14", Manufactura = "pb.man_14", Comercio = "pb.com_14", Servicios = "pb.ser_14")
+
+Cb144 <- Cb144 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb144, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -525,6 +631,10 @@ datatable(Cb144,
 ```{r}
 library(tidyverse)
 Cb145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_14", Construcción = "po.con_14", Manufactura = "po.man_14", Comercio = "po.com_14", Servicios = "po.ser_14")
+
+Cb145 <- Cb145 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb145, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -533,6 +643,10 @@ datatable(Cb145,
 ```{r}
 library(tidyverse)
 Cb146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_14", Construcción = "re.con_14", Manufactura = "re.man_14", Comercio = "re.com_14", Servicios = "re.ser_14")
+
+Cb146 <- Cb146 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb146, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -541,6 +655,10 @@ datatable(Cb146,
 ```{r}
 library(tidyverse)
 Cb147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_14", Construcción = "va.con_14", Manufactura = "va.man_14", Comercio = "va.com_14", Servicios = "va.ser_14")
+
+Cb147 <- Cb147 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb147, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -551,6 +669,10 @@ datatable(Cb147,
 ```{r}
 library(tidyverse)
 Cb191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "ue.pri_19", Construcción = "ue.con_19", Manufactura = "ue.man_19", Comercio = "ue.com_19", Servicios = "ue.ser_19")
+
+Cb191 <- Cb191 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb191, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -559,6 +681,10 @@ datatable(Cb191,
 ```{r}
 library(tidyverse)
 Cb192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "af.pri_19", Construcción = "af.con_19", Manufactura = "af.man_19", Comercio = "af.com_19", Servicios = "af.ser_19")
+
+Cb192 <- Cb192 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb192, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -567,6 +693,10 @@ datatable(Cb192,
 ```{r}
 library(tidyverse)
 Cb193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "fb.pri_19", Construcción = "fb.con_19", Manufactura = "fb.man_19", Comercio = "fb.com_19", Servicios = "fb.ser_19")
+
+Cb193 <- Cb193 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb193, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -575,6 +705,10 @@ datatable(Cb193,
 ```{r}
 library(tidyverse)
 Cb194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "pb.pri_19", Construcción = "pb.con_19", Manufactura = "pb.man_19", Comercio = "pb.com_19", Servicios = "pb.ser_19")
+
+Cb194 <- Cb194 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb194, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -583,6 +717,10 @@ datatable(Cb194,
 ```{r}
 library(tidyverse)
 Cb195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "po.pri_19", Construcción = "po.con_19", Manufactura = "po.man_19", Comercio = "po.com_19", Servicios = "po.ser_19")
+
+Cb195 <- Cb195 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb195, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -591,6 +729,10 @@ datatable(Cb195,
 ```{r}
 library(tidyverse)
 Cb196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "re.pri_19", Construcción = "re.con_19", Manufactura = "re.man_19", Comercio = "re.com_19", Servicios = "re.ser_19")
+
+Cb196 <- Cb196 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb196, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
@@ -599,6 +741,10 @@ datatable(Cb196,
 ```{r}
 library(tidyverse)
 Cb197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "va.pri_19", Construcción = "va.con_19", Manufactura = "va.man_19", Comercio = "va.com_19", Servicios = "va.ser_19")
+
+Cb197 <- Cb197 %>%
+  mutate(across(starts_with("Primarios"):ends_with("Servicios"), ~ format(., big.mark = ",")))
+
 datatable(Cb197, 
           options = list(pageLength = 10, lengthChange = FALSE, scrollX = TRUE, searching = FALSE),
           rownames = FALSE)
