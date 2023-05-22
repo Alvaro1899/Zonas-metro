@@ -15,6 +15,18 @@ params:
 bibliography: citas.bib
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = FALSE,
+	message = FALSE,
+	warning = FALSE
+)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 library(readxl)
 Base_unica <- read_excel("Bases de datos\\Base única.xlsx")
@@ -3812,7 +3824,7 @@ datatable(HH197,extensions = 'Buttons',
 library(tidyverse)
 IHH991 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_99", Construcción = "IHHue.con_99", Manufactura = "IHHue.man_99", Comercio = "IHHue.com_99", Servicios = "IHHue.ser_99")
 # Aplicar formato a las columnas numéricas
-IHH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH991[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH991,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3833,7 +3845,7 @@ datatable(IHH991,extensions = 'Buttons',
 library(tidyverse)
 IHH992 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_99", Construcción = "IHHaf.con_99", Manufactura = "IHHaf.man_99", Comercio = "IHHaf.com_99", Servicios = "IHHaf.ser_99")
 # Aplicar formato a las columnas numéricas
-IHH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH992[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH992,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3854,7 +3866,7 @@ datatable(IHH992,extensions = 'Buttons',
 library(tidyverse)
 IHH993 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_99", Construcción = "IHHue.con_99", Manufactura = "IHHue.man_99", Comercio = "IHHue.com_99", Servicios = "IHHue.ser_99")
 # Aplicar formato a las columnas numéricas
-IHH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH993[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH993,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3875,7 +3887,7 @@ datatable(IHH993,extensions = 'Buttons',
 library(tidyverse)
 IHH994 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_99", Construcción = "IHHpb.con_99", Manufactura = "IHHpb.man_99", Comercio = "IHHpb.com_99", Servicios = "IHHpb.ser_99")
 # Aplicar formato a las columnas numéricas
-IHH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH994[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH994,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3896,7 +3908,7 @@ datatable(IHH994,extensions = 'Buttons',
 library(tidyverse)
 IHH995 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_99", Construcción = "IHHpo.con_99", Manufactura = "IHHpo.man_99", Comercio = "IHHpo.com_99", Servicios = "IHHpo.ser_99")
 # Aplicar formato a las columnas numéricas
-IHH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH995[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH995,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3917,7 +3929,7 @@ datatable(IHH995,extensions = 'Buttons',
 library(tidyverse)
 IHH996 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_99", Construcción = "IHHre.con_99", Manufactura = "IHHre.man_99", Comercio = "IHHre.com_99", Servicios = "IHHre.ser_99")
 # Aplicar formato a las columnas numéricas
-IHH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH996[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH996,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3938,7 +3950,7 @@ datatable(IHH996,extensions = 'Buttons',
 library(tidyverse)
 IHH997 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_99", Construcción = "IHHva.con_99", Manufactura = "IHHva.man_99", Comercio = "IHHva.com_99", Servicios = "IHHva.ser_99")
 # Aplicar formato a las columnas numéricas
-IHH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH997[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH997,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3962,7 +3974,7 @@ datatable(IHH997,extensions = 'Buttons',
 library(tidyverse)
 IHH041 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_04", Construcción = "IHHue.con_04", Manufactura = "IHHue.man_04", Comercio = "IHHue.com_04", Servicios = "IHHue.ser_04")
 # Aplicar formato a las columnas numéricas
-IHH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH041[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH041,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -3983,7 +3995,7 @@ datatable(IHH041,extensions = 'Buttons',
 library(tidyverse)
 IHH042 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_04", Construcción = "IHHaf.con_04", Manufactura = "IHHaf.man_04", Comercio = "IHHaf.com_04", Servicios = "IHHaf.ser_04")
 # Aplicar formato a las columnas numéricas
-IHH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH042[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH042,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4004,7 +4016,7 @@ datatable(IHH042,extensions = 'Buttons',
 library(tidyverse)
 IHH043 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_04", Construcción = "IHHue.con_04", Manufactura = "IHHue.man_04", Comercio = "IHHue.com_04", Servicios = "IHHue.ser_04")
 # Aplicar formato a las columnas numéricas
-IHH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH043[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH043,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4025,7 +4037,7 @@ datatable(IHH043,extensions = 'Buttons',
 library(tidyverse)
 IHH044 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_04", Construcción = "IHHpb.con_04", Manufactura = "IHHpb.man_04", Comercio = "IHHpb.com_04", Servicios = "IHHpb.ser_04")
 # Aplicar formato a las columnas numéricas
-IHH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH044[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH044,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4046,7 +4058,7 @@ datatable(IHH044,extensions = 'Buttons',
 library(tidyverse)
 IHH045 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_04", Construcción = "IHHpo.con_04", Manufactura = "IHHpo.man_04", Comercio = "IHHpo.com_04", Servicios = "IHHpo.ser_04")
 # Aplicar formato a las columnas numéricas
-IHH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH045[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH045,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4067,7 +4079,7 @@ datatable(IHH045,extensions = 'Buttons',
 library(tidyverse)
 IHH046 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_04", Construcción = "IHHre.con_04", Manufactura = "IHHre.man_04", Comercio = "IHHre.com_04", Servicios = "IHHre.ser_04")
 # Aplicar formato a las columnas numéricas
-IHH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH046[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH046,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4088,7 +4100,7 @@ datatable(IHH046,extensions = 'Buttons',
 library(tidyverse)
 IHH047 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_04", Construcción = "IHHva.con_04", Manufactura = "IHHva.man_04", Comercio = "IHHva.com_04", Servicios = "IHHva.ser_04")
 # Aplicar formato a las columnas numéricas
-IHH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH047[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH047,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4112,7 +4124,7 @@ datatable(IHH047,extensions = 'Buttons',
 library(tidyverse)
 IHH091 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_09", Construcción = "IHHue.con_09", Manufactura = "IHHue.man_09", Comercio = "IHHue.com_09", Servicios = "IHHue.ser_09")
 # Aplicar formato a las columnas numéricas
-IHH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH091[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH091,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4133,7 +4145,7 @@ datatable(IHH091,extensions = 'Buttons',
 library(tidyverse)
 IHH092 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_09", Construcción = "IHHaf.con_09", Manufactura = "IHHaf.man_09", Comercio = "IHHaf.com_09", Servicios = "IHHaf.ser_09")
 # Aplicar formato a las columnas numéricas
-IHH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH092[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH092,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4154,7 +4166,7 @@ datatable(IHH092,extensions = 'Buttons',
 library(tidyverse)
 IHH093 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_09", Construcción = "IHHue.con_09", Manufactura = "IHHue.man_09", Comercio = "IHHue.com_09", Servicios = "IHHue.ser_09")
 # Aplicar formato a las columnas numéricas
-IHH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH093[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH093,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4175,7 +4187,7 @@ datatable(IHH093,extensions = 'Buttons',
 library(tidyverse)
 IHH094 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_09", Construcción = "IHHpb.con_09", Manufactura = "IHHpb.man_09", Comercio = "IHHpb.com_09", Servicios = "IHHpb.ser_09")
 # Aplicar formato a las columnas numéricas
-IHH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH094[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x)format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH094,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4196,7 +4208,7 @@ datatable(IHH094,extensions = 'Buttons',
 library(tidyverse)
 IHH095 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_09", Construcción = "IHHpo.con_09", Manufactura = "IHHpo.man_09", Comercio = "IHHpo.com_09", Servicios = "IHHpo.ser_09")
 # Aplicar formato a las columnas numéricas
-IHH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH095[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH095,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4217,7 +4229,7 @@ datatable(IHH095,extensions = 'Buttons',
 library(tidyverse)
 IHH096 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_09", Construcción = "IHHre.con_09", Manufactura = "IHHre.man_09", Comercio = "IHHre.com_09", Servicios = "IHHre.ser_09")
 # Aplicar formato a las columnas numéricas
-IHH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH096[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH096,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4238,7 +4250,7 @@ datatable(IHH096,extensions = 'Buttons',
 library(tidyverse)
 IHH097 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_09", Construcción = "IHHva.con_09", Manufactura = "IHHva.man_09", Comercio = "IHHva.com_09", Servicios = "IHHva.ser_09")
 # Aplicar formato a las columnas numéricas
-IHH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH097[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH097,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4261,7 +4273,7 @@ datatable(IHH097,extensions = 'Buttons',
 library(tidyverse)
 IHH141 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_14", Construcción = "IHHue.con_14", Manufactura = "IHHue.man_14", Comercio = "IHHue.com_14", Servicios = "IHHue.ser_14")
 # Aplicar formato a las columnas numéricas
-IHH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH141[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH141,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4282,7 +4294,7 @@ datatable(IHH141,extensions = 'Buttons',
 library(tidyverse)
 IHH142 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_14", Construcción = "IHHaf.con_14", Manufactura = "IHHaf.man_14", Comercio = "IHHaf.com_14", Servicios = "IHHaf.ser_14")
 # Aplicar formato a las columnas numéricas
-IHH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH142[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH142,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4303,7 +4315,7 @@ datatable(IHH142,extensions = 'Buttons',
 library(tidyverse)
 IHH143 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_14", Construcción = "IHHue.con_14", Manufactura = "IHHue.man_14", Comercio = "IHHue.com_14", Servicios = "IHHue.ser_14")
 # Aplicar formato a las columnas numéricas
-IHH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH143[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH143,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4324,7 +4336,7 @@ datatable(IHH143,extensions = 'Buttons',
 library(tidyverse)
 IHH144 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_14", Construcción = "IHHpb.con_14", Manufactura = "IHHpb.man_14", Comercio = "IHHpb.com_14", Servicios = "IHHpb.ser_14")
 # Aplicar formato a las columnas numéricas
-IHH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH144[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH144,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4345,7 +4357,7 @@ datatable(IHH144,extensions = 'Buttons',
 library(tidyverse)
 IHH145 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_14", Construcción = "IHHpo.con_14", Manufactura = "IHHpo.man_14", Comercio = "IHHpo.com_14", Servicios = "IHHpo.ser_14")
 # Aplicar formato a las columnas numéricas
-IHH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH145[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH145,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4366,7 +4378,7 @@ datatable(IHH145,extensions = 'Buttons',
 library(tidyverse)
 IHH146 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_14", Construcción = "IHHre.con_14", Manufactura = "IHHre.man_14", Comercio = "IHHre.com_14", Servicios = "IHHre.ser_14")
 # Aplicar formato a las columnas numéricas
-IHH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH146[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH146,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4387,7 +4399,7 @@ datatable(IHH146,extensions = 'Buttons',
 library(tidyverse)
 IHH147 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_14", Construcción = "IHHva.con_14", Manufactura = "IHHva.man_14", Comercio = "IHHva.com_14", Servicios = "IHHva.ser_14")
 # Aplicar formato a las columnas numéricas
-IHH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH147[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH147,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4411,7 +4423,7 @@ datatable(IHH147,extensions = 'Buttons',
 library(tidyverse)
 IHH191 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_19", Construcción = "IHHue.con_19", Manufactura = "IHHue.man_19", Comercio = "IHHue.com_19", Servicios = "IHHue.ser_19")
 # Aplicar formato a las columnas numéricas
-IHH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH191[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH191,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4432,7 +4444,7 @@ datatable(IHH191,extensions = 'Buttons',
 library(tidyverse)
 IHH192 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHaf.pri_19", Construcción = "IHHaf.con_19", Manufactura = "IHHaf.man_19", Comercio = "IHHaf.com_19", Servicios = "IHHaf.ser_19")
 # Aplicar formato a las columnas numéricas
-IHH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH192[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH192,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4453,7 +4465,7 @@ datatable(IHH192,extensions = 'Buttons',
 library(tidyverse)
 IHH193 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHue.pri_19", Construcción = "IHHue.con_19", Manufactura = "IHHue.man_19", Comercio = "IHHue.com_19", Servicios = "IHHue.ser_19")
 # Aplicar formato a las columnas numéricas
-IHH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH193[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH193,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4474,7 +4486,7 @@ datatable(IHH193,extensions = 'Buttons',
 library(tidyverse)
 IHH194 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpb.pri_19", Construcción = "IHHpb.con_19", Manufactura = "IHHpb.man_19", Comercio = "IHHpb.com_19", Servicios = "IHHpb.ser_19")
 # Aplicar formato a las columnas numéricas
-IHH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH194[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH194,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4495,7 +4507,7 @@ datatable(IHH194,extensions = 'Buttons',
 library(tidyverse)
 IHH195 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHpo.pri_19", Construcción = "IHHpo.con_19", Manufactura = "IHHpo.man_19", Comercio = "IHHpo.com_19", Servicios = "IHHpo.ser_19")
 # Aplicar formato a las columnas numéricas
-IHH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH195[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH195,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4516,7 +4528,7 @@ datatable(IHH195,extensions = 'Buttons',
 library(tidyverse)
 IHH196 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHre.pri_19", Construcción = "IHHre.con_19", Manufactura = "IHHre.man_19", Comercio = "IHHre.com_19", Servicios = "IHHre.ser_19")
 # Aplicar formato a las columnas numéricas
-IHH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH196[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH196,extensions = 'Buttons',
           options = list(
             pageLength = 10,
@@ -4537,7 +4549,7 @@ datatable(IHH196,extensions = 'Buttons',
 library(tidyverse)
 IHH197 <- select(Base_zona, Clave = "cvegeo", Municipio = "nom_mun",Primarios = "IHHva.pri_19", Construcción = "IHHva.con_19", Manufactura = "IHHva.man_19", Comercio = "IHHva.com_19", Servicios = "IHHva.ser_19")
 # Aplicar formato a las columnas numéricas
-IHH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, digits = 4))
+IHH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")] <- lapply(IHH197[, c("Primarios", "Construcción", "Manufactura", "Comercio", "Servicios")], function(x) format(x, big.mark = ",", decimal.mark = ".", digits = 4))
 datatable(IHH197,extensions = 'Buttons',
           options = list(
             pageLength = 10,
