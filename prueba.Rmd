@@ -307,7 +307,7 @@ Con base en la información de los subsectores de los 21 sectores principales de
 * Total de remuneraciones (RE) [miles de pesos a precios corrientes]
 * Valor agregado censal bruto (VA) [miles de pesos a precios corrientes]
 
-Posteriormente, se replica la metodología utilizada por García y Carranco (2008) para estimar los coeficientes de participación relativa (PR), de localización de la actividad económica (QL), Hirschman-Herfindahl (HH) e Inverso de Hirschman-Herfindahl (IHH).
+Posteriormente, se replica la metodología utilizada por [-@GarciaCastro2008] para estimar los coeficientes de participación relativa (PR), de localización de la actividad económica (QL), Hirschman-Herfindahl (HH) e Inverso de Hirschman-Herfindahl (IHH).
 
 
 $PR_ij$=$X_ij/X_in$
