@@ -2,14 +2,17 @@
 title: "Ficha de Información Metropolitana"
 author:
   - Universidad Autónoma Metropolitnana
-  - Martínez Rodriguez, Alvaro^["Universidad Autonóma Metropolitana, Unidad Azcapotzalco", martinez.alvaro61@gmail.com]
-  - Pérez Victorino, Leonardo^["Universidad Autonóma Metropolitana, Unidad Azcapotzalco", perezvictorinoleonardo@gmail.com]
+  - Lic. Martínez Rodriguez, Alvaro^["Lic. en Economía Universidad Autonóma Metropolitana, Unidad Azcapotzalco", martinez.alvaro61@gmail.com]
+  - Lic. Pérez Victorino, Leonardo^["Lic. en Economía Universidad Autonóma Metropolitana, Unidad Azcapotzalco", perezvictorinoleonardo@gmail.com]
 output:
   html_document:
     toc: TRUE
     toc_float: TRUE
     toc_depth: 4
     theme: journal
+    includes:
+      in_header: 
+      - header.html
 params:
   zona: "1.01"
 bibliography: citas.bib
@@ -24,8 +27,6 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(message = FALSE)
 ```
-
-
 
 ```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 library(readxl)
@@ -186,7 +187,7 @@ piramide <- ggplot(tabla_poblacion, aes(x = edad, y = poblacion), ) +
   geom_bar(data = subset(tabla_poblacion, genero == "F"), aes(fill = "F"), stat = "identity") +
   geom_bar(data = subset(tabla_poblacion, genero == "M"), aes(fill = "M"), stat = "identity") +
   scale_fill_manual(values=c("F"="#bc4ed8","M"="#1b004b")) +
-  scale_y_continuous(labels = paste0(as.character(c(seq(2, 0, -1), seq(1, 2, 1))), "m"))  +
+  scale_y_continuous(breaks = seq(-2, 2, 1), labels = paste0(abs(seq(-2, 2, 1)), "m")) +
   coord_flip()+
   labs(fill = "Sexo", x = "Edad", y = "Población") +
   ggtitle("Gráfico Piramidal de Población")
@@ -307,7 +308,7 @@ Con base en la información de los subsectores de los 21 sectores principales de
 * Total de remuneraciones (RE) [miles de pesos a precios corrientes]
 * Valor agregado censal bruto (VA) [miles de pesos a precios corrientes]
 
-Posteriormente, se replica la metodología utilizada por [-@GarciaCastro2008] para estimar los coeficientes de participación relativa (PR), de localización de la actividad económica (QL), Hirschman-Herfindahl (HH) e Inverso de Hirschman-Herfindahl (IHH).
+Posteriormente, se replica la metodología utilizada por [@GarciaCastro2008] para estimar los coeficientes de participación relativa (PR), de localización de la actividad económica (QL), Hirschman-Herfindahl (HH) e Inverso de Hirschman-Herfindahl (IHH).
 
 
 $PR_ij$=$X_ij/X_in$
